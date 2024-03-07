@@ -148,7 +148,7 @@ if [[ $DO_RETRO == "TRUE" ]] ; then
         EXTRN_MDL_SOURCE_BASEDIR_LBCS="/work2/noaa/wrfruc/murdzek/RRFS_input_data/gfs/0p25deg/grib2"
       fi
     else
-      EXTRN_MDL_SOURCE_BASEDIR_ICS=/work2/noaa/wrfruc/murdzek/RRFS_input_data/data/gfs/0p25deg/grib2
+      EXTRN_MDL_SOURCE_BASEDIR_ICS=/work2/noaa/wrfruc/murdzek/RRFS_input_data/gfs/0p25deg/grib2
       EXTRN_MDL_SOURCE_BASEDIR_LBCS=/work2/noaa/wrfruc/murdzek/RRFS_input_data/gfs/0p25deg/grib2
     fi
     if [[ ${DO_OSSE} == "TRUE" ]]; then
