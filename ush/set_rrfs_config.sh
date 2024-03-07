@@ -138,18 +138,18 @@ if [[ $DO_RETRO == "TRUE" ]] ; then
   if [[ $MACHINE == "orion" ]] || [[ $MACHINE == "hercules" ]] ; then
     if [[ ${DO_ENSEMBLE} == "TRUE" ]]; then
       if [[ ${EXTRN_MDL_NAME_ICS} == "GDASENKF" ]]; then
-        EXTRN_MDL_SOURCE_BASEDIR_ICS="/work2/noaa/wrfruc/murdzek/RRFS_input_data/enkf/atm"
+        EXTRN_MDL_SOURCE_BASEDIR_ICS="/work/noaa/wrfruc/mhu/rrfs/data/enkf/atm"
       elif [[ ${EXTRN_MDL_NAME_ICS} == "FV3GFS" ]]; then
-        EXTRN_MDL_SOURCE_BASEDIR_ICS="/work2/noaa/wrfruc/murdzek/RRFS_input_data/gfs/0p25deg/grib2"
+        EXTRN_MDL_SOURCE_BASEDIR_ICS="/work/noaa/wrfruc/mhu/rrfs/data/gfs/0p25deg/grib2"
       fi
       if [[ ${EXTRN_MDL_NAME_LBCS} == "GDASENKF" ]]; then
-        EXTRN_MDL_SOURCE_BASEDIR_LBCS="/work2/noaa/wrfruc/murdzek/RRFS_input_data/enkf/atm"
+        EXTRN_MDL_SOURCE_BASEDIR_LBCS="/work/noaa/wrfruc/mhu/rrfs/data/enkf/atm"
       elif [[ ${EXTRN_MDL_NAME_LBCS} == "FV3GFS" ]]; then
-        EXTRN_MDL_SOURCE_BASEDIR_LBCS="/work2/noaa/wrfruc/murdzek_RRFS_input_data/gfs/0p25deg/grib2"
+        EXTRN_MDL_SOURCE_BASEDIR_LBCS="/work/noaa/wrfruc/mhu/rrfs/data/gfs/0p25deg/grib2"
       fi
     else
-      EXTRN_MDL_SOURCE_BASEDIR_ICS=/work2/noaa/wrfruc/murdzek/RRFS_input_data/gfs/0p25deg/grib2
-      EXTRN_MDL_SOURCE_BASEDIR_LBCS=/work2/noaa/wrfruc/murdzek/RRFS_input_data/gfs/0p25deg/grib2
+      EXTRN_MDL_SOURCE_BASEDIR_ICS=/work/noaa/wrfruc/mhu/rrfs/data/gfs/0p25deg/grib2
+      EXTRN_MDL_SOURCE_BASEDIR_LBCS=/work/noaa/wrfruc/mhu/rrfs/data/gfs/0p25deg/grib2
     fi
     OBSPATH=/work/noaa/wrfruc/mhu/rrfs/data/obs_rap
     OBSPATH_NSSLMOSIAC=/work/noaa/wrfruc/mhu/rrfs/data/reflectivity
