@@ -86,10 +86,14 @@ case $MACHINE in
     ;;
 
   "ORION")
+    ulimit -s unlimited
+    ulimit -a
     APRUN="srun --export=ALL"
     ;;
 
   "HERCULES")
+    ulimit -s unlimited
+    ulimit -a
     APRUN="srun --export=ALL"
     ;;
 
@@ -140,6 +144,19 @@ YYYYMMDDm2=$(date +%Y%m%d -d "${START_DATE} 2 days ago")
 YYJJJ00000000=`date +"%y%j00000000" -d "${START_DATE} 1 day ago"`
 YYJJJ1200=`date +"%y%j1200" -d "${START_DATE} 1 day ago"`
 YYJJJ2200000000=`date +"%y%j2200000000" -d "${START_DATE} 1 day ago"`
+#
+#-----------------------------------------------------------------------
+#
+# Determine early exit for running blending vs 1 time step ensinit.
+#
+#-----------------------------------------------------------------------
+#
+run_blending=${NWGES_BASEDIR}/${cdate_crnt_fhr}/run_blending
+run_ensinit=${NWGES_BASEDIR}/${cdate_crnt_fhr}/run_ensinit
+if [[ $CYCLE_SUBTYPE == "ensinit" && -e $run_blending && ! -e $run_ensinit ]]; then
+   echo "clean exit ensinit, blending used instead of ensinit."
+   exit 0
+fi
 #
 #-----------------------------------------------------------------------
 #
@@ -197,10 +214,6 @@ if [ "${CYCLE_TYPE}" = "spinup" ]; then
   for cyc_start in "${CYCL_HRS_SPINSTART[@]}"; do
     if [ ${HH} -eq ${cyc_start} ]; then
       BKTYPE=1
-      if [ "${DO_ENS_BLENDING}" = "TRUE" ] && [ $cdate_crnt_fhr -ge ${FIRST_BLENDED_CYCLE_DATE} ]; then
-        echo "do blending"
-        BKTYPE=3   # warm start from blended ics
-      fi
     fi
   done
   if [ "${CYCLE_SUBTYPE}" = "spinup" ]; then
@@ -218,6 +231,11 @@ else
       fi
     fi
   done
+fi
+if [ "${DO_ENS_BLENDING}" = "TRUE" ] &&
+   [ -e $run_blending ] && [ ! -e $run_ensinit ] &&
+   [ "${CYCLE_TYPE}" = "spinup" ] && [ "${CYCLE_SUBTYPE}" = "spinup" ]; then
+   BKTYPE=3
 fi
 
 # cycle surface 
@@ -393,9 +411,9 @@ else
     if [ "${IO_LAYOUT_Y}" = "1" ]; then
       for file in ${filelistn}; do
         if [ "${CYCLE_SUBTYPE}" = "spinup" ]; then
-          cp_vrfy ${ctrl_bkpath}/${file}  ${file}
+          cp ${ctrl_bkpath}/${file}  ${file}
         else
-          cp_vrfy ${bkpath}/${restart_prefix}${file}  ${file}
+          cp ${bkpath}/${restart_prefix}${file}  ${file}
         fi
         ln -s ${bkpath}/${restart_prefix}${file}  bk_${file}
       done
@@ -405,7 +423,7 @@ else
         do
           iii=$(printf %4.4i $ii)
           if [ "${CYCLE_SUBTYPE}" = "spinup" ]; then
-            cp_vrfy ${ctrl_bkpath}/${file}.${iii}  ${file}.${iii}
+            cp ${ctrl_bkpath}/${file}.${iii}  ${file}.${iii}
           else
             cp ${bkpath}/${restart_prefix}${file}.${iii}  ${file}.${iii}
           fi
@@ -472,10 +490,10 @@ if [ ${HH} -eq ${SNOWICE_update_hour} ] && [ "${CYCLE_TYPE}" = "prod" ] ; then
       cp ${IMSSNOW_ROOT}/latest.SNOW_IMS .
    elif [ -r "${IMSSNOW_ROOT}/${YYJJJ2200000000}" ]; then
       cp ${IMSSNOW_ROOT}/${YYJJJ2200000000} latest.SNOW_IMS
-   elif [ -r "${IMSSNOW_ROOT}/rap.${YYYYMMDD}/rap.t${HH}z.imssnow.grib2" ]; then
-      cp ${IMSSNOW_ROOT}/rap.${YYYYMMDD}/rap.t${HH}z.imssnow.grib2  latest.SNOW_IMS
-   elif [ -r "${IMSSNOW_ROOT}/rap.${YYYYMMDD}/rap_e.t${HH}z.imssnow.grib2" ]; then
-      cp ${IMSSNOW_ROOT}/rap_e.${YYYYMMDD}/rap_e.t${HH}z.imssnow.grib2  latest.SNOW_IMS
+   elif [ -r "${IMSSNOW_ROOT}/${OBSTYPE_SOURCE}.${YYYYMMDD}/${OBSTYPE_SOURCE}.t${HH}z.imssnow.grib2" ]; then
+      cp ${IMSSNOW_ROOT}/${OBSTYPE_SOURCE}.${YYYYMMDD}/${OBSTYPE_SOURCE}.t${HH}z.imssnow.grib2  latest.SNOW_IMS
+   elif [ -r "${IMSSNOW_ROOT}/${OBSTYPE_SOURCE}_e.${YYYYMMDD}/rap_e.t${HH}z.imssnow.grib2" ]; then
+      cp ${IMSSNOW_ROOT}/${OBSTYPE_SOURCE}_e.${YYYYMMDD}/${OBSTYPE_SOURCE}_e.t${HH}z.imssnow.grib2  latest.SNOW_IMS
    else
      echo "${IMSSNOW_ROOT} data does not exist!!"
      echo "WARNING: No snow update at ${HH}!!!!"
@@ -631,7 +649,7 @@ if [ "${DO_SMOKE_DUST}" = "TRUE" ] && [ "${CYCLE_TYPE}" = "spinup" ]; then  # cy
         if [ "${IO_LAYOUT_Y}" = "1" ]; then
           checkfile=${bkpath_find}/${restart_prefix_find}fv_tracer.res.tile1.nc
           if [ -r "${checkfile}" ]; then
-            ncks -A -v smoke,dust ${checkfile}  fv_tracer.res.tile1.nc
+            ncks -A -v smoke,dust,coarsepm ${checkfile}  fv_tracer.res.tile1.nc
           fi
         else
           for ii in ${list_iolayout}
@@ -639,7 +657,7 @@ if [ "${DO_SMOKE_DUST}" = "TRUE" ] && [ "${CYCLE_TYPE}" = "spinup" ]; then  # cy
             iii=$(printf %4.4i $ii)
             checkfile=${bkpath_find}/${restart_prefix_find}fv_tracer.res.tile1.nc.${iii}
             if [ -r "${checkfile}" ]; then
-              ncks -A -v smoke,dust ${checkfile}  fv_tracer.res.tile1.nc.${iii}
+              ncks -A -v smoke,dust,coarsepm ${checkfile}  fv_tracer.res.tile1.nc.${iii}
             fi
           done
         fi
@@ -978,7 +996,7 @@ if [ ${SFC_CYC} -eq 3 ] ; then
    if [ "${USE_CLM}" = "TRUE" ]; then
      do_lake_surgery=".true."
    fi
-   raphrrr_com=${RAPHRR_SOIL_ROOT}
+   raphrrr_com=${RAPHRRR_SOIL_ROOT}
    rapfile='missing'
    hrrrfile='missing'
    hrrr_akfile='missing'
