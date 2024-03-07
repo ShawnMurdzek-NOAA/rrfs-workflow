@@ -72,13 +72,9 @@ def create_model_configure_file(
     #
     dot_quilting_dot = f".{lowercase(str(QUILTING))}."
     dot_write_dopost = f".{lowercase(str(WRITE_DOPOST))}."
-    restart_interval = RESTART_INTERVAL
+    restart_interval = restart_hrs
     nsout = NSOUT
 
-    if WRTCMP_output_file == "netcdf_parallel":
-        WRTCMP_ideflate = 1
-    else:
-        WRTCMP_ideflate = 0
     #
     # Decide the forecast length for this cycle
     #
@@ -136,7 +132,10 @@ def create_model_configure_file(
         "quilting": dot_quilting_dot,
         "output_grid": WRTCMP_output_grid,
         "output_file": WRTCMP_output_file,
+        "zstandard_level" : WRTCMP_zstandard_level,
         "ideflate": WRTCMP_ideflate,
+        "quantize_mode": WRTCMP_quantize_mode,
+        "quantize_nsd": WRTCMP_quantize_nsd,
         "nfhout": NFHOUT,
         "nfhmax_hf": NFHMAX_HF,
         "nfhout_hf": NFHOUT_HF,
