@@ -86,10 +86,14 @@ case $MACHINE in
     ;;
 
   "ORION")
+    ulimit -s unlimited
+    ulimit -a
     APRUN="srun --export=ALL"
     ;;
 
   "HERCULES")
+    ulimit -s unlimited
+    ulimit -a
     APRUN="srun --export=ALL"
     ;;
 
@@ -645,7 +649,7 @@ if [ "${DO_SMOKE_DUST}" = "TRUE" ] && [ "${CYCLE_TYPE}" = "spinup" ]; then  # cy
         if [ "${IO_LAYOUT_Y}" = "1" ]; then
           checkfile=${bkpath_find}/${restart_prefix_find}fv_tracer.res.tile1.nc
           if [ -r "${checkfile}" ]; then
-            ncks -A -v smoke,dust ${checkfile}  fv_tracer.res.tile1.nc
+            ncks -A -v smoke,dust,coarsepm ${checkfile}  fv_tracer.res.tile1.nc
           fi
         else
           for ii in ${list_iolayout}
@@ -653,7 +657,7 @@ if [ "${DO_SMOKE_DUST}" = "TRUE" ] && [ "${CYCLE_TYPE}" = "spinup" ]; then  # cy
             iii=$(printf %4.4i $ii)
             checkfile=${bkpath_find}/${restart_prefix_find}fv_tracer.res.tile1.nc.${iii}
             if [ -r "${checkfile}" ]; then
-              ncks -A -v smoke,dust ${checkfile}  fv_tracer.res.tile1.nc.${iii}
+              ncks -A -v smoke,dust,coarsepm ${checkfile}  fv_tracer.res.tile1.nc.${iii}
             fi
           done
         fi
@@ -992,7 +996,7 @@ if [ ${SFC_CYC} -eq 3 ] ; then
    if [ "${USE_CLM}" = "TRUE" ]; then
      do_lake_surgery=".true."
    fi
-   raphrrr_com=${RAPHRR_SOIL_ROOT}
+   raphrrr_com=${RAPHRRR_SOIL_ROOT}
    rapfile='missing'
    hrrrfile='missing'
    hrrr_akfile='missing'

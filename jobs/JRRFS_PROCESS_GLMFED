@@ -67,7 +67,7 @@ if [ ${CYCLE_TYPE} == "spinup" ]; then
 else
   workdir=${CYCLE_DIR}/process_glmfed
 fi
-if [ ${IS_ENSEMBLE} == "1" ]; then
+if [ ${DO_ENSEMBLE} = TRUE ]; then
   workdir=${CYCLE_DIR}/process_glmfed_enkf
 fi
 
@@ -91,7 +91,7 @@ export MODE=$GLMFED_DATA_MODE
 #
 #-----------------------------------------------------------------------
 #
-python -u ${SCRIPTSdir}/exrrfs_prep_glmfed.py \
+python -u ${SCRIPTSdir}/exrrfs_process_glmfed.py \
 #
 #-----------------------------------------------------------------------
 #
