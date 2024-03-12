@@ -1,6 +1,6 @@
 
 if [[ $MACHINE == "jet" ]] ; then
-  ACCOUNT=nrtrr
+  ACCOUNT="${ACCOUNT:-nrtrr}"
   if [[ -n $RESERVATION ]] ; then
     ACCOUNT=rtrr
     SERVICE_ACCOUNT=rtrr
@@ -31,7 +31,7 @@ if [[ $MACHINE == "jet" ]] ; then
   fi
 
 elif [[ $MACHINE == "hera" ]] ; then
-  ACCOUNT="zrtrr"
+  ACCOUNT="${ACCOUNT:-zrtrr}"
   PARTITION_DEFAULT=""
   PARTITION_FCST=""
   QUEUE_ANALYSIS="batch"
@@ -39,7 +39,7 @@ elif [[ $MACHINE == "hera" ]] ; then
   QUEUE_GRAPHICS="batch"
 
 elif [[ $MACHINE == "orion" ]] ; then
-  ACCOUNT="${ACCOUNT:-fv3-cam}"
+  ACCOUNT="${ACCOUNT:-wrfruc}"
   PARTITION_ANALYSIS=orion
   QUEUE_ANALYSIS="batch"
   QUEUE_PRDGEN="batch"
@@ -48,7 +48,7 @@ elif [[ $MACHINE == "orion" ]] ; then
   NCORES_PER_NODE=24
 
 elif [[ $MACHINE == "hercules" ]] ; then
-  ACCOUNT="${ACCOUNT:-rtrr}"
+  ACCOUNT="${ACCOUNT:-wrfruc}"
   PARTITION_ANALYSIS=hercules
   QUEUE_ANALYSIS="batch"
   QUEUE_PRDGEN="batch"
