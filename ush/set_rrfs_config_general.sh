@@ -41,6 +41,7 @@ elif [[ $MACHINE == "hera" ]] ; then
 elif [[ $MACHINE == "orion" ]] ; then
   ACCOUNT="${ACCOUNT:-wrfruc}"
   PARTITION_ANALYSIS=orion
+  PARTITION_GRAPHICS=orion
   QUEUE_ANALYSIS="batch"
   QUEUE_PRDGEN="batch"
   QUEUE_GRAPHICS="batch"
@@ -50,6 +51,7 @@ elif [[ $MACHINE == "orion" ]] ; then
 elif [[ $MACHINE == "hercules" ]] ; then
   ACCOUNT="${ACCOUNT:-wrfruc}"
   PARTITION_ANALYSIS=hercules
+  PARTITION_GRAPHICS=hercules
   QUEUE_ANALYSIS="batch"
   QUEUE_PRDGEN="batch"
   QUEUE_GRAPHICS="batch"
@@ -141,6 +143,7 @@ WTIME_RUN_FCST_LONG="03:45:00"
 WTIME_MAKE_LBCS="02:00:00"
 WTIME_RUN_ANALYSIS="00:50:00"
 WTIME_RUN_PREPSTART="00:20:00"
+WTIME_RUN_PY_MAPS="03:30:00"
 
 START_TIME_SPINUP="01:30:00"
 START_TIME_PROD="01:40:00"
@@ -215,6 +218,7 @@ if [[ ${PREDEF_GRID_NAME} == "RRFS_CONUS_3km" ]] ; then
     WTIME_RUN_FCST="00:45:00"
     WTIME_RUN_FCST_LONG="02:30:00"
     WTIME_RUN_ANALYSIS="00:30:00"
+    WTIME_RUN_PY_MAPS="02:30:00"
 
     START_TIME_SPINUP="01:10:00"
     START_TIME_PROD="02:10:00"
@@ -293,6 +297,8 @@ if [[ ${PREDEF_GRID_NAME} == "RRFS_CONUS_3km" ]] ; then
     CLEAN_OLDFCST_HRS="18"
     CLEAN_OLDSTMPPOST_HRS="6"
     CLEAN_NWGES_HRS="28"
+
+    WTIME_RUN_PY_MAPS="03:15:00"
 
   elif [[ $MACHINE == "orion" ]] ; then
     LAYOUT_X="30"
@@ -377,6 +383,8 @@ elif [[ ${PREDEF_GRID_NAME} == "RRFS_CONUS_13km" ]] ; then
 
     FV3GFS_FILE_FMT_ICS="netcdf"
     FV3GFS_FILE_FMT_LBCS="netcdf"
+  
+    WTIME_RUN_PY_MAPS="01:15:00"
 
   elif [[ $MACHINE == "orion" ]] ; then
     LAYOUT_X="30"
@@ -537,6 +545,8 @@ elif [[ ${PREDEF_GRID_NAME} == "RRFS_NA_3km" ]] ; then
     CLEAN_OLDFCST_HRS="18"
     CLEAN_OLDSTMPPOST_HRS="12"
     CLEAN_NWGES_HRS="18"
+
+    WTIME_RUN_PY_MAPS="05:30:00"
 
   elif [[ $MACHINE == "hera" ]] ; then
     CCPP_PHYS_SUITE="FV3_HRRR"

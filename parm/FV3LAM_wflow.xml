@@ -3764,7 +3764,7 @@ MODULES_RUN_TASK_FP script.
 
 {%- endif %}
 
-{%- if machine in ["JET", "HERA"]  %}
+{%- if machine in ["JET", "HERA", "ORION", "HERCULES"]  %}
 {%- if not do_ensemble %}
 <!--
 ************************************************************************
@@ -3779,7 +3779,7 @@ MODULES_RUN_TASK_FP script.
       &RSRV_GRAPHICS;
       &WALL_LIMIT_GRAPHICS;
 
-      <walltime>{{ wtime_run_fcst_long }}</walltime>
+      <walltime>{{ wtime_run_py_maps }}</walltime>
       <nodes>{{ nnodes_run_graphics }}:ppn={{ ppn_run_graphics }}</nodes>
       <jobname><cyclestr>&TAG;_python{{ uscore_ensmem_name }}_@H_#tilelabel#</cyclestr></jobname>
       <join><cyclestr>&LOGDIR;/python_&TAG;{{ uscore_ensmem_name }}_#tilelabel#.log</cyclestr></join>

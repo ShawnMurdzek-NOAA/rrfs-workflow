@@ -356,6 +356,7 @@ settings="\
   'wtime_run_jedienvar_ioda': ${WTIME_RUN_JEDIENVAR_IODA}
   'wtime_run_ioda_prepbufr': ${WTIME_RUN_IODA_PREPBUFR}
   'wtime_add_aerosol': ${WTIME_ADD_AEROSOL}
+  'wtime_run_py_maps': ${WTIME_RUN_PY_MAPS}
 #
 # start time for each task.
 #
