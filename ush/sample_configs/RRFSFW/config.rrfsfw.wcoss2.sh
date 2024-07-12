@@ -31,8 +31,8 @@ LBC_SPEC_INTVL_HRS="1"
 BOUNDARY_LEN_HRS="36"
 BOUNDARY_PROC_GROUP_NUM="36"
 
-DATE_FIRST_CYCL="20240209"
-DATE_LAST_CYCL="20240209"
+DATE_FIRST_CYCL="20240304"
+DATE_LAST_CYCL="20240304"
 CYCL_HRS=( "06" )
 
 RUN_TASK_MAKE_GRID="TRUE"
@@ -58,14 +58,18 @@ PPN_RUN_FCST="63"
 NNODES_RUN_FCST="4"
 TPP_RUN_FCST="2"
 
+USE_CUSTOM_POST_CONFIG_FILE="TRUE"
+CUSTOM_POST_CONFIG_FP="$(cd "$( dirname "${BASH_SOURCE[0]}" )/.." &>/dev/null&&pwd)/fix/upp/postxconfig-NT-rrfs.txt"
+CUSTOM_POST_PARAMS_FP="$(cd "$( dirname "${BASH_SOURCE[0]}" )/.." &>/dev/null&&pwd)/fix/upp/params_grib2_tbl_new"
+
 DO_NON_DA_RUN="TRUE"
 DO_RETRO="TRUE"
 DO_SMOKE_DUST="FALSE"
 VCOORD_FILE="global_hyblev_fcst_rrfsL65.txt"
-WFLOW_XML_TMPL_FN="FV3LAM_wflow_nonDA.xml"
+WFLOW_XML_TMPL_FN="FV3LAM_wflow_firewx.xml"
 FV3_NML_YAML_CONFIG_FN=""
 FV3_NML_BASE_SUITE_FN="input.nml.RRFSFW"
 
 USE_USER_STAGED_EXTRN_FILES="TRUE"
-EXTRN_MDL_SOURCE_BASEDIR_ICS="/lfs/h2/emc/lam/noscrub/RRFS_input/input_model_data/RRFS/2024020906"
-EXTRN_MDL_SOURCE_BASEDIR_LBCS="/lfs/h2/emc/lam/noscrub/RRFS_input/input_model_data/RRFS/2024020906"
+EXTRN_MDL_SOURCE_BASEDIR_ICS="/lfs/h2/emc/lam/noscrub/RRFS_input/input_model_data/RRFS/2024030406"
+EXTRN_MDL_SOURCE_BASEDIR_LBCS="/lfs/h2/emc/lam/noscrub/RRFS_input/input_model_data/RRFS/2024030406"

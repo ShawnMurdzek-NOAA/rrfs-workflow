@@ -319,6 +319,7 @@ settings="\
   'tpp_run_enkf': ${TPP_RUN_ENKF}
   'tpp_run_fcst': ${TPP_RUN_FCST}
   'tpp_run_post': ${TPP_RUN_POST}
+  'tpp_run_bufrsnd': ${TPP_RUN_BUFRSND}
 #
 # Maximum wallclock time for each task.
 #
@@ -650,6 +651,7 @@ if [[ "${MACHINE,,}" == "wcoss2" ]] ; then
   echo "module use /apps/ops/test/nco/modulefiles" >> ${EXPTDIR}/run_rocoto.sh
   echo "module load core/rocoto/${rocoto_ver}" >> ${EXPTDIR}/run_rocoto.sh
 else
+  echo "source /etc/profile" >> ${EXPTDIR}/run_rocoto.sh
   echo "module load rocoto" >> ${EXPTDIR}/run_rocoto.sh
 fi
 echo "rocotorun -w ${WFLOW_XML_FN} -d ${WFLOW_XML_FN%.*}.db" >> ${EXPTDIR}/run_rocoto.sh

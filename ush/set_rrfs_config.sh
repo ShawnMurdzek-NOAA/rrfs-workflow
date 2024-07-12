@@ -39,12 +39,12 @@ fi
 if [[ $MACHINE == "wcoss2" ]] ; then
   EXTRN_MDL_SOURCE_BASEDIR_ICS=/lfs/h1/ops/prod/com/gfs/v16.3
   EXTRN_MDL_SOURCE_BASEDIR_LBCS=/lfs/h1/ops/prod/com/gfs/v16.3
-  OBSPATH=/lfs/h1/ops/prod/com/obsproc/v1.1
+  OBSPATH=/lfs/h1/ops/prod/com/obsproc/v1.2
   OBSPATH_NSSLMOSIAC=/lfs/h1/ops/prod/dcom/ldmdata/obs/upperair/mrms/conus/MergedReflectivityQC
   ENKF_FCST=/lfs/h1/ops/prod/com/gfs/v16.3
   SST_ROOT=/lfs/h1/ops/prod/com/nsst/v1.2
   GVF_ROOT=/lfs/h1/ops/prod/dcom/viirs
-  IMSSNOW_ROOT=/lfs/h1/ops/prod/com/obsproc/v1.1
+  IMSSNOW_ROOT=/lfs/h1/ops/prod/com/obsproc/v1.2
   FIRE_RAVE_DIR=/lfs/h1/ops/prod/dcom
   FVCOM_DIR="/lfs/h1/ops/prod/com/nosofs/v3.5"
   FVCOM_FILE="fvcom"
@@ -53,6 +53,8 @@ if [[ $MACHINE == "wcoss2" ]] ; then
   RAPHRRR_SOIL_ROOT="/lfs/h1/ops/prod/com"
   GLMFED_EAST_ROOT="/lfs/h1/ops/prod/dcom/ldmdata/obs/GOES-16/GLM/tiles"
   GLMFED_WEST_ROOT="/lfs/h1/ops/prod/dcom/ldmdata/obs/GOES-17/GLM/tiles"
+  AIRCRAFT_REJECT="/lfs/h2/emc/lam/noscrub/emc.lam/FIX_RRFS/gsi"
+  SFCOBS_USELIST="/lfs/h2/emc/lam/noscrub/emc.lam/FIX_RRFS/gsi"
   if [[ $OBSTYPE_SOURCE == "rrfs" ]]; then
     OBSPATH=/lfs/h2/emc/lam/noscrub/emc.lam/obsproc.DATA/CRON/rrfs/com/obsproc/v1.0
     IMSSNOW_ROOT=/lfs/h2/emc/lam/noscrub/emc.lam/obsproc.DATA/CRON/rrfs/com/obsproc/v1.0
@@ -163,7 +165,12 @@ if [[ $DO_RETRO == "TRUE" ]] ; then
     RAPHRRR_SOIL_ROOT="/work2/noaa/wrfruc/murdzek/RRFS_input_data/rap_hrrr_soil"
   fi
   if [[ $MACHINE == "wcoss2" ]] ; then
-    RETRODATAPATH="/lfs/h2/emc/lam/noscrub/emc.lam/rrfs_retro_data"
+  # for winter 2022  
+    #RETRODATAPATH="/lfs/h2/emc/lam/noscrub/emc.lam/rrfs_retro_data"
+  # for spring 2023  
+    RETRODATAPATH="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+  #for Feb 2022
+#    RETRODATAPATH="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
     if [[ ${DO_ENSEMBLE} == "TRUE" ]]; then
       if [[ ${EXTRN_MDL_NAME_ICS} == "GEFS" ]]; then
         EXTRN_MDL_SOURCE_BASEDIR_ICS="${RETRODATAPATH}/GEFS/dsg"
@@ -180,8 +187,8 @@ if [[ $DO_RETRO == "TRUE" ]] ; then
         EXTRN_MDL_SOURCE_BASEDIR_LBCS="${RETRODATAPATH}/gfs/0p25deg/grib2"
       fi
     else
-      EXTRN_MDL_SOURCE_BASEDIR_ICS=${RETRODATAPATH}/gfs
-      EXTRN_MDL_SOURCE_BASEDIR_LBCS=${RETRODATAPATH}/gfs
+      EXTRN_MDL_SOURCE_BASEDIR_ICS=${RETRODATAPATH}/gfs/0p25deg/grib2
+      EXTRN_MDL_SOURCE_BASEDIR_LBCS=${RETRODATAPATH}/gfs/0p25deg/grib2
     fi
     OBSPATH=${RETRODATAPATH}/obs_rap
     OBSPATH_NSSLMOSIAC=${RETRODATAPATH}/reflectivity/upperair/mrms/conus/MergedReflectivityQC/
@@ -192,7 +199,10 @@ if [[ $DO_RETRO == "TRUE" ]] ; then
     SST_ROOT="${RETRODATAPATH}/highres_sst"
     GVF_ROOT="${RETRODATAPATH}/gvf/grib2"
     IMSSNOW_ROOT="${RETRODATAPATH}/snow/ims96/grib2"
-    RAPHRRR_SOIL_ROOT="/lfs/h2/emc/lam/noscrub/emc.lam/rrfs_retro_data/rap_hrrr_soil"
+    RAPHRRR_SOIL_ROOT="${RETRODATAPATH}/rap_hrrr_soil"
+    GLMFED_EAST_ROOT="${RETRODATAPATH}/sat/nesdis/goes-east/glm/full-disk"
+    GLMFED_WEST_ROOT="${RETRODATAPATH}/sat/nesdis/goes-east/glm/full-disk"
+    FIRE_RAVE_DIR=${RETRODATAPATH}/RAVE_RAW
   fi
 fi
 
