@@ -61,14 +61,16 @@ def nonvar_cldana(xmlFile, expdir, do_ensemble=False, spinup_mode=0):
         taskdep = f'\n    <taskdep task="nonvar_bufrobs"/>\n    <taskdep task="nonvar_reflobs"/>'
     #
     prep_ic_dep = ""
-    jedidep = ""
-    if os.getenv("DO_JEDI", "FALSE").upper() == "TRUE":
+    da_dep = ""
+    if os.getenv("DO_DART", "FALSE").upper() == "TRUE":
+        da_dep = f'\n    <taskdep task="dart_update"/>'
+    elif os.getenv("DO_JEDI", "FALSE").upper() == "TRUE":
         if os.getenv("DO_ENSEMBLE", "FALSE").upper() == "TRUE":
-            jedidep = f'\n    <taskdep task="getkf_solver"/>'
+            da_dep = f'\n    <taskdep task="getkf_solver"/>'
         elif do_spinup:
-            jedidep = f'\n    <taskdep task="jedivar_spinup"/>'
+            da_dep = f'\n    <taskdep task="jedivar_spinup"/>'
         else:
-            jedidep = f'\n    <taskdep task="jedivar"/>'
+            da_dep = f'\n    <taskdep task="jedivar"/>'
     else:
         prep_ic_dep = f'\n    <taskdep task="prep_ic"/>'
         if do_spinup:
@@ -76,7 +78,7 @@ def nonvar_cldana(xmlFile, expdir, do_ensemble=False, spinup_mode=0):
     #
     dependencies = f'''
   <dependency>
-  <and>{timedep}{prep_ic_dep}{jedidep}{taskdep}
+  <and>{timedep}{prep_ic_dep}{da_dep}{taskdep}
   </and>
   </dependency>'''
     #

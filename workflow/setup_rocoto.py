@@ -52,6 +52,19 @@ if os.getenv("DO_NONVAR_CLOUD_ANA", "FALSE").upper() == "TRUE":
         print('Please set DO_NONVAR_CLOUD_ANA=false and try again')
         exit()
 
+# Check compatibility of setup with DART
+if os.getenv("DO_DART", "FALSE").upper() == "TRUE":
+    if os.getenv("DO_ENSEMBLE", "FALSE").upper() == "FALSE":
+        print('DO_ENSEMBLE = FALSE and DO_DART = TRUE.')
+        print('To use DART, DO_ENSEMBLE must be TRUE.')
+        print('Please set DO_ENSEMBLE = TRUE or DO_DART = FALSE and try again')
+        exit()
+    if os.getenv("DO_DETERMINISTIC", "FALSE").upper() == "TRUE":
+        print('DO_DETERMINISTIC = TRUE and DO_DART = TRUE.')
+        print('To use DART, DO_DETERMINISTIC must be FALSE.')
+        print('Please set DO_DETERMINISTIC = FALSE or DO_DART = FALSE and try again')
+        exit()
+
 # create comroot (no matter exists or not)
 comroot = get_required_env('COMROOT')
 dataroot = get_required_env('DATAROOT')

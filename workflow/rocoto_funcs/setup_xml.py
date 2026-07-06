@@ -35,6 +35,10 @@ from rocoto_funcs.misc import misc
 from rocoto_funcs.hofx import hofx
 from rocoto_funcs.pyDAmonitor import pyDAmonitor
 from rocoto_funcs.archive import archive
+from rocoto_funcs.dart_obs_proc import dart_obs_proc
+from rocoto_funcs.dart_filter import dart_filter
+from rocoto_funcs.dart_update import dart_update
+from rocoto_funcs.dart_diags import dart_diags
 
 # setup_xml
 
@@ -144,6 +148,10 @@ def setup_xml(HOMErrfs, expdir):
                 if do_chemistry == "TRUE":
                     ioda_airnow(xmlFile, expdir)
                 ioda_bufr(xmlFile, expdir)
+            if os.getenv("DO_DART", 'FALSE').upper() == "TRUE":
+                dart_obs_proc(xmlFile, expdir)
+                if not os.path.isfile(f"{HOMErrfs}/exec/filter"):
+                    print("  *** DO_DART=true but DART not cloned and compiled yet!!! ***\n  run `tools/clone_build_dart.sh` first\n")
             if os.getenv("DO_RADAR_REF", "FALSE").upper() == "TRUE":
                 ioda_mrms_refl(xmlFile, expdir)
             if os.getenv("DO_NONVAR_CLOUD_ANA", "FALSE").upper() == "TRUE":
@@ -165,6 +173,10 @@ def setup_xml(HOMErrfs, expdir):
                 getkf(xmlFile, expdir, 'SOLVER')
                 if os.getenv("DO_GETKF_POST", "TRUE").upper() == "TRUE":
                     getkf(xmlFile, expdir, 'POST')
+            if os.getenv("DO_DART", 'FALSE').upper() == "TRUE":
+                dart_filter(xmlFile, expdir)
+                dart_update(xmlFile, expdir)
+                dart_diags(xmlFile, expdir)
             if os.getenv("DO_NONVAR_CLOUD_ANA", "FALSE").upper() == "TRUE":
                 nonvar_cldana(xmlFile, expdir, do_ensemble=True)
             if os.getenv("DO_PYDAMONITOR", "FALSE").upper() == "TRUE":

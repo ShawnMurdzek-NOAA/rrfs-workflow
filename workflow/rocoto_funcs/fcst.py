@@ -92,6 +92,7 @@ def fcst(xmlFile, expdir, do_ensemble=False, dcEnsGrpInfo=None, do_spinup=False)
 
     jedidep = ""
     cloudana_dep = ""
+    dart_dep = ""
     final_recenterdep = ""
     recenterdep = ""
     spaces = " " * 6
@@ -111,6 +112,10 @@ def fcst(xmlFile, expdir, do_ensemble=False, dcEnsGrpInfo=None, do_spinup=False)
             jedidep = f'\n    <taskdep task="jedivar_spinup"/>'
         else:
             jedidep = f'\n    <taskdep task="jedivar"/>'
+
+    if os.getenv("DO_DART", "FALSE").upper() == "TRUE":
+        do_da = True
+        dart_dep = f'\n    <taskdep task="dart_update"/>'
 
     if os.getenv("DO_RECENTER", "FALSE").upper() == "TRUE":
         if os.getenv("DO_ENSEMBLE", "FALSE").upper() == "TRUE":
@@ -152,17 +157,18 @@ def fcst(xmlFile, expdir, do_ensemble=False, dcEnsGrpInfo=None, do_spinup=False)
                 strneqs += '\n' + spaces + f'  <strneq><left><cyclestr>@H</cyclestr></left><right>{hr}</right></strneq>'
             streqs += '\n  ' + spaces + '</or>'
             jedidep_indented = textwrap.indent(jedidep, "    ")  # four extra spaces
+            dart_dep_indented = textwrap.indent(dart_dep, "    ")  # four extra spaces
             cloudana_dep_indented = textwrap.indent(cloudana_dep, "    ")  # four extra spaces
             da_dep = f'''
     <or>
       <and>{streqs}{mpasblend_dep}
       </and>
-      <and>{strneqs}{jedidep_indented}{cloudana_dep_indented}
+      <and>{strneqs}{jedidep_indented}{dart_dep_indented}{cloudana_dep_indented}
       </and>
     </or>'''
 
         else:
-            da_dep = f'{jedidep}{cloudana_dep}'
+            da_dep = f'{jedidep}{dart_dep}{cloudana_dep}'
 
     else:
         da_dep = ""
