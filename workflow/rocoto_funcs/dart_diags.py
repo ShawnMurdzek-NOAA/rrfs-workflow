@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # this file hosts all tasks that will not be needed by NCO
 import os
-import textwrap
 from rocoto_funcs.base import xml_task, get_cascade_env
 
 # begin of dart_diags --------------------------------------------------------
