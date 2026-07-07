@@ -1,6 +1,7 @@
 #!/bin/bash
 # shellcheck disable=all
 dart_hash=f2a13259
+diag_hash=482f55dc
 
 # Set necessary directories
 toolsdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -11,16 +12,27 @@ cd "${toolsdir}/../sideload"
 # Clone DART if not done so already
 if [[ -d DART ]]; then
   echo "DART/ already cloned, skipping cloning step"
-  cd DART
 else
   which git-lfs 2>/dev/null ||  module load git-lfs
-  set -x
   GIT_LFS_SKIP_SMUDGE=1 git clone -b DART_Regional https://github.com/syha/DART.git
   cd DART
   git checkout "${dart_hash}" &> /dev/null
+  cd ..
+fi
+
+# Clone pyDARTdiags if not done so already
+if [[ -d pyDARTdiags ]]; then
+  echo "pyDARTdiags/ already cloned, skipping cloning step"
+else
+  which git-lfs 2>/dev/null ||  module load git-lfs
+  GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/NCAR/pyDARTdiags
+  cd pyDARTdiags
+  git checkout "${diag_hash}" &> /dev/null
+  cd ..
 fi
 
 # Build DART if not done so already
+cd DART
 DARTdir="$( pwd )"
 cd models/mpas_atm/work
 if [[ -f filter ]]; then
