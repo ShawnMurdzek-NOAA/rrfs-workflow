@@ -179,6 +179,13 @@ case ${task_id} in
     set -x
     "${HOMErrfs}/workflow/sideload/pyDAmonitor/ush/drive.sh"
     ;;
+  dart_diags)
+    module purge
+    set +x
+    source "${HOMErrfs}/workflow/sideload/pyDAmonitor/ush/load_pyDAmonitor.sh"
+    set -x
+    "${HOMErrfs}/workflow/sideload/dart_diags.sh"
+    ;;
   graphics)
     set +x
     source "${HOMErrfs}/workflow/tools/load_pygraf.sh"
