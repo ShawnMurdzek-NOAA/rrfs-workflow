@@ -154,6 +154,7 @@
                                 'AIRCRAFT_U_WIND_COMPONENT',
                                 'AIRCRAFT_V_WIND_COMPONENT',
                                 'AIRCRAFT_TEMPERATURE',
+                                'AIRCRAFT_SPECIFIC_HUMIDITY',
                                 'ACARS_U_WIND_COMPONENT',
                                 'ACARS_V_WIND_COMPONENT',
                                 'ACARS_TEMPERATURE',

@@ -172,6 +172,11 @@ case ${task_id} in
       exit 0
     fi
     ;;
+  dart_obs_proc)
+    source "${HOMErrfs}/workflow/sideload/pyDAmonitor/ush/load_pyDAmonitor.sh"
+    export PYTHONPATH=$PYTHONPATH:"${HOMErrfs}/workflow/sideload/pyDARTdiags/src"
+    "${HOMErrfs}/jobs/JRRFS_DART_OBS_PROC"
+    ;;
   pydamonitor)
     module purge
     set +x

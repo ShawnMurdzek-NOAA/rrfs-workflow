@@ -64,6 +64,11 @@ if os.getenv("DO_DART", "FALSE").upper() == "TRUE":
         print('To use DART, DO_DETERMINISTIC must be FALSE.')
         print('Please set DO_DETERMINISTIC = FALSE or DO_DART = FALSE and try again')
         exit()
+    if os.getenv("DO_IODA", "FALSE").upper() == "FALSE":
+        print('DO_IODA = FALSE and DO_DART = TRUE.')
+        print('To use DART, DO_IODA must be TRUE.')
+        print('Please set DO_IODA = TRUE or DO_DART = FALSE and try again')
+        exit()
 
 # create comroot (no matter exists or not)
 comroot = get_required_env('COMROOT')

@@ -27,7 +27,7 @@ def dart_obs_proc(xmlFile, expdir):
     dependencies = f'''
   <dependency>
   <and>{timedep}
-    <datadep age="00:02:00"><cyclestr>{fpath}</cyclestr></datadep>
+    <taskdep task="ioda_bufr"/>
   </and>
   </dependency>'''
     #
