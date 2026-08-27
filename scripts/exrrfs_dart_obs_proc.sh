@@ -21,7 +21,7 @@ all_obs=( "aircar" )
 #
 #-----------------------------------------------------------------------
 #
-# Add obs errors to IODA files
+# Add obs errors to IODA files and convert to obs_seq files
 #
 #-----------------------------------------------------------------------
 #
@@ -29,32 +29,35 @@ all_obs=( "aircar" )
 # Obs errors to add to IODA files
 ln -snf "${FIXrrfs}/dart/errtable.rrfs" .
 
-# Add obs errors
+# Copy over DART IODA to obs_seq converter
+cp -r ${HOMErrfs}/workflow/sideload/aux_dart/DART/pytools/pyjedi/src/pyjedi .
+
+# Loop over all obs
 for ob in ${all_obs[@]}; do
   ioda_name="ioda_${ob}.nc"
   full_path="${COMOUT}/ioda_bufr/${WGF}/${ioda_name}"
   if [[ -s ${full_path} ]]; then
     ln -snf "${full_path}" "${ioda_name}"
-    python ${HOMErrfs}/workflow/tools/modify_ioda_obs_err_for_dart.py ${ioda_name} errtable.rrfs --out_fname ${ob}_with_err.nc
+    
+    # File names
+    ioda_err="${ob}_with_err.nc"
+    obs_seq_out="${ob}_ob_seq.out"
+    pyjedi_yaml="${ob}.yml"
+    ln -snf "${FIXrrfs}/dart/${pyjedi_yaml}" .
+
+    # Add obs errors to IODA file
+    python ${HOMErrfs}/workflow/tools/modify_ioda_obs_err_for_dart.py ${ioda_name} errtable.rrfs --out_fname ${ioda_err}
+
+    # Convert to obs_seq file
+    python -m pyjedi.ioda2obsq ${pyjedi_yaml} ${ioda_err} ${obs_seq_out}
+
+    # Save final obs_seq file
+    ${cpreq} ${obs_seq_out} "${COMOUT}/dart_obs_proc/${WGF}/${obs_seq_out}"
+
   else
     echo "WARNING: The following IODA file is NOT available"
     echo ${full_path}
   fi
-done
-
-#
-#-----------------------------------------------------------------------
-#
-# Convert to DART obs_seq files
-#
-#-----------------------------------------------------------------------
-#
-
-# To be added later
-
-# Update later so this saves the final obs_seq files, not the intermediate IODA files
-for ob in ${all_obs[@]}; do
-  ${cpreq} ${ob}_with_err.nc "${COMOUT}/dart_obs_proc/${WGF}/${ob}_with_err.nc"
 done
 
 exit 0
