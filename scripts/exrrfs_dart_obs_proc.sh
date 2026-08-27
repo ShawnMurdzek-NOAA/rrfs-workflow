@@ -51,13 +51,34 @@ for ob in ${all_obs[@]}; do
     # Convert to obs_seq file
     python -m pyjedi.ioda2obsq ${pyjedi_yaml} ${ioda_err} ${obs_seq_out}
 
-    # Save final obs_seq file
-    ${cpreq} ${obs_seq_out} "${COMOUT}/dart_obs_proc/${WGF}/${obs_seq_out}"
-
   else
     echo "WARNING: The following IODA file is NOT available"
     echo ${full_path}
   fi
 done
+
+#
+#-----------------------------------------------------------------------
+#
+# Combine obs_seq files into a single file
+#
+#-----------------------------------------------------------------------
+#
+
+obs_seq_names=( *ob_seq.out )
+n_files=${#obs_seq_names[@]}
+if [[ ${n_files} == 0 ]]; then
+  echo "ERROR: No DART obs_seq files created"
+  exit 1
+elif [[ ${n_files} == 1 ]]; then
+  cp ${obs_seq_names[@]} obs_seq.out
+else
+  echo "ERROR: Cannot handle multiple DART obs_seq files yet"
+  echo "Choose a single observation type in all_obs and try again"
+  exit 1
+fi
+
+# Save final obs_seq file
+${cpreq} obs_seq.out "${COMOUT}/dart_obs_proc/${WGF}/obs_seq.out"
 
 exit 0
