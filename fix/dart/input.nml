@@ -37,7 +37,7 @@
 &filter_nml
    async                    = 0
    adv_ens_command          = './advance_model.csh'
-   ens_size                 = 3
+   ens_size                 = 30
    output_members           = .true.
    obs_sequence_in_name     = 'obs_seq.out'
    obs_sequence_out_name    = 'obs_seq.final'
@@ -50,7 +50,7 @@
    last_obs_days            = -1
    last_obs_seconds         = -1
    num_output_state_members = 0
-   num_output_obs_members   = 3
+   num_output_obs_members   = 30
    output_interval          = 1
    num_groups               = 1
    distributed_state        = .true.
@@ -66,11 +66,11 @@
    output_sd                = .true.
    write_all_stages_at_end  = .false.
 
-   inf_flavor                  = 2,                       0,
+   inf_flavor                  = 0,                       4,
    inf_initial_from_restart    = .false.,                .true.,
    inf_sd_initial_from_restart = .false.,                .true.,
    inf_deterministic           = .true.,                  .true.,
-   inf_initial                 = 1.0,                     1.0
+   inf_initial                 = 1.0,                     0.95
    inf_sd_initial              = 0.6,                     0.0
    inf_damping                 = 0.9,                     1.0
    inf_lower_bound             = 1.0,                     1.0
@@ -172,13 +172,13 @@
 &model_nml
    init_template_filename       = 'init.nc'
    assimilation_period_days     = 0
-   assimilation_period_seconds  = 21600
+   assimilation_period_seconds  = 3600
    model_perturbation_amplitude = 0.0001
    vert_localization_coord      = 3
    calendar                     = 'Gregorian'
-   highest_obs_pressure_mb      = 1.0
+   highest_obs_pressure_mb      = 10.0
    sfc_elev_max_diff            = 100.
-   log_p_vert_interp            = .false.
+   log_p_vert_interp            = .true.
    debug                        = 0
    use_u_for_wind               = .false.
    use_rbf_option               = 2
@@ -209,7 +209,6 @@
                           'rho',                   'QTY_DENSITY',
                           'uReconstructZonal',     'QTY_U_WIND_COMPONENT',
                           'uReconstructMeridional','QTY_V_WIND_COMPONENT',
-                          'w',                     'QTY_VERTICAL_VELOCITY',
                           'qv',                    'QTY_VAPOR_MIXING_RATIO',
                           'surface_pressure',      'QTY_SURFACE_PRESSURE',
    mpas_state_bounds    = 'qv','0.0','NULL','CLAMP',
