@@ -170,7 +170,7 @@
 
 
 &model_nml
-   init_template_filename       = 'init.nc'
+   init_template_filename       = 'invariant.nc'
    assimilation_period_days     = 0
    assimilation_period_seconds  = 3600
    model_perturbation_amplitude = 0.0001
