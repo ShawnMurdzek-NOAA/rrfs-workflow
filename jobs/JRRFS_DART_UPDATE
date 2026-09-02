@@ -18,6 +18,8 @@ export USHrrfs=${USHrrfs:-${HOMErrfs}/ush}
 #-----------------------------------------------------------------------
 #
 export UMBRELLA_PREP_IC_DATA=${UMBRELLA_PREP_IC_DATA:-${DATAROOT}/${RUN}_prep_ic_${cyc}_${rrfs_ver}/${WGF}}
+export UMBRELLA_PREP_LBC_DATA=${UMBRELLA_PREP_LBC_DATA:-${DATAROOT}/${RUN}_prep_lbc_${cyc}_${rrfs_ver}/${WGF}}
+export UMBRELLA_DART_FILTER_DATA=${UMBRELLA_DART_FILTER_DATA:-${DATAROOT}/${RUN}_dart_filter_${cyc}_${rrfs_ver}/${WGF}}
 export UMBRELLA_DART_UPDATE_DATA=${UMBRELLA_DART_UPDATE_DATA:-${DATAROOT}/${RUN}_dart_update_${cyc}_${rrfs_ver}/${WGF}}
 export pid=${pid:-$$}
 export jobid=${jobid:-dart_update_${cyc}}

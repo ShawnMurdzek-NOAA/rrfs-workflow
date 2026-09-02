@@ -15,10 +15,6 @@ cd "${DATA}" || exit 1
 #-----------------------------------------------------------------------
 #
 
-start_time=$(date -d "${CDATE:0:8} ${CDATE:8:2}" +%Y-%m-%d_%H:%M:%S)
-timestr=$(date -d "${CDATE:0:8} ${CDATE:8:2}" +%Y-%m-%d_%H.%M.%S)
-time_min="${subcyc:-00}"
-
 # DART uses time in days/seconds since 1 Jan 1601
 # Must specify timezone as UTC, otherwise difference is incorrect
 # (this is because they had no timezones in 1601)
@@ -66,11 +62,11 @@ posteriors="filter_out.txt"
 touch ${priors}
 touch ${posteriors}
 mkdir -p ens_in
-mkdir -p ens_out
+mkdir -p "${UMBRELLA_DART_FILTER_DATA}/ens_out"
 for i in $(seq -w 001 "${ENS_SIZE}"); do
   ln -snf "${UMBRELLA_PREP_IC_DATA}/mem${i}/${initial_file}" "ens_in/mem${i}.nc"
   echo "ens_in/mem${i}.nc" >> ${priors}
-  echo "ens_out/mem${i}.nc" >> ${posteriors}
+  echo "${UMBRELLA_DART_FILTER_DATA}/ens_out/mem${i}.nc" >> ${posteriors}
 done
 
 # create a template netCDF file with both mpasout and invariant information
