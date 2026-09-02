@@ -121,8 +121,12 @@ if [[ ${START_TYPE} == "warm" ]] || [[ ${START_TYPE} == "cold" && ${COLDSTART_CY
   err_chk
 
   # copy desired output files to COMOUT
-  cp -r OBS_DIR "${COMOUT}/dart_filter/${WGF}"
+  cp obs_seq.out "${COMOUT}/dart_filter/${WGF}"
+  cp obs_seq.final "${COMOUT}/dart_filter/${WGF}"
+  cp dart_log.out "${COMOUT}/dart_filter/${WGF}"
 
 else
   echo "INFO: No DA at the cold start cycle"
 fi
+
+exit 0
