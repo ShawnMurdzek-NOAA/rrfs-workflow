@@ -15,9 +15,8 @@ def dart_obs_proc(xmlFile, expdir):
     }
 
     dcTaskEnv['KEEPDATA'] = get_cascade_env(f"KEEPDATA_{task_id}".upper()).upper()
-    # dependencies
-    fpath = f'{OBSPATH}/@Y@m@d@H.rap.t@Hz.prepbufr.tm00'
 
+    # dependencies
     timedep = ""
     realtime = os.getenv("REALTIME", "false")
     if realtime.upper() == "TRUE":
