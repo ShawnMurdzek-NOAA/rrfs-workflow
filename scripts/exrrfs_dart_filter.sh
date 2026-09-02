@@ -7,21 +7,50 @@ cpreq=${cpreq:-cpreq}
 prefix=${EXTRN_MDL_SOURCE%_NCO} # remove the trailing '_NCO' if any
 cd "${DATA}" || exit 1
 
+#
+#-----------------------------------------------------------------------
+#
+# Create necessary date strings
+#
+#-----------------------------------------------------------------------
+#
+
 start_time=$(date -d "${CDATE:0:8} ${CDATE:8:2}" +%Y-%m-%d_%H:%M:%S)
 timestr=$(date -d "${CDATE:0:8} ${CDATE:8:2}" +%Y-%m-%d_%H.%M.%S)
 time_min="${subcyc:-00}"
+
+# DART uses time in days/seconds since 1 Jan 1601
+# Must specify timezone as UTC, otherwise difference is incorrect
+# (this is because they had no timezones in 1601)
+ref_time=$(TZ=UTC date -d "16010101" +%s)
+cdate_sec=$(TZ=UTC date -d "${CDATE::8} ${CDATE:8:2}" +%s)
+diff=$(( cdate_sec - ref_time ))
+
+# Only consider obs within ob_offset sec of analysis time
+ob_offset=5400
+ob_start=$(( diff - ob_offset ))
+ob_end=$(( diff + ob_offset ))
+
+first_obs_days="$(( ob_start / 86400 ))"
+first_obs_seconds="$(( ob_start % 86400 ))"
+last_obs_days="$(( ob_end / 86400 ))"
+last_obs_seconds="$(( ob_end % 86400 ))"
+
+init_time_days="$(( diff / 86400 ))"
+init_time_seconds="$(( diff % 86400 ))"
+
 #
-zeta_levels=${EXPDIR}/config/ZETA_LEVELS.txt
-nlevel=$(wc -l < "${zeta_levels}")
-ln -snf "${FIXrrfs}/${MESH_NAME}/${MESH_NAME}.invariant.nc_L${nlevel}_${prefix}" ./invariant.nc
+#-----------------------------------------------------------------------
 #
-# link observations files
+# Copy and link input files
 #
-mkdir -p OBS_DIR
-ln -snf "${UMBRELLA_DART_OBS_PROC_DATA}/obs_seq.out" "OBS_DIR/obs_seq.out"
+#-----------------------------------------------------------------------
 #
+
+# copy observations files from COM directory
+${cpreq} "${COMOUT}/dart_obs_proc/${WGF}/obs_seq.out" .
+
 # determine whether to begin new cycles and link correct ensembles
-#
 do_DAcycling='false'
 if [[ -r "${UMBRELLA_PREP_IC_DATA}/mem001/init.nc" ]]; then
   export START_TYPE='cold'
@@ -30,9 +59,8 @@ else
   export START_TYPE='warm'
   initial_file='mpasout.nc'
 fi
-#
+
 # link ensembles members and define input/output files
-#
 priors="filter_in.txt"
 posteriors="filter_out.txt"
 touch ${priors}
@@ -44,13 +72,43 @@ for i in $(seq -w 001 "${ENS_SIZE}"); do
   echo "ens_in/mem${i}.nc" >> ${priors}
   echo "ens_out/mem${i}.nc" >> ${posteriors}
 done
-#
-# enter the run directory again
-#
+
+# create a template netCDF file with both mpasout and invariant information
+zeta_levels=${EXPDIR}/config/ZETA_LEVELS.txt
+nlevel=$(wc -l < "${zeta_levels}")
+ln -snf "${FIXrrfs}/${MESH_NAME}/${MESH_NAME}.invariant.nc_L${nlevel}_${prefix}" ./invariant.nc
+${cpreq} "${UMBRELLA_PREP_IC_DATA}/mem001/${initial_file}" mpas_template.nc
+ncks -A invariant.nc mpas_template.nc
 cd "${DATA}" || exit 1
-#
+
 # copy namelist
-cp "${FIXrrfs}/dart/input.nml"
+cd "${DATA}" || exit 1
+${cpreq} "${FIXrrfs}/dart/input.nml" .
+
+#
+#-----------------------------------------------------------------------
+#
+# Update namelist
+#
+#-----------------------------------------------------------------------
+#
+
+sed -i "s={ENS_SIZE}=${ENS_SIZE}=" input.nml
+sed -i "s={INIT_TIME_DAYS}=${init_time_days}=" input.nml
+sed -i "s={INIT_TIME_SECONDS}=${init_time_seconds}=" input.nml
+sed -i "s={FIRST_OBS_DAYS}=${first_obs_days}=" input.nml
+sed -i "s={FIRST_OBS_SECONDS}=${first_obs_seconds}=" input.nml
+sed -i "s={LAST_OBS_DAYS}=${last_obs_days}=" input.nml
+sed -i "s={LAST_OBS_SECONDS}=${last_obs_seconds}=" input.nml
+sed -i "s={ASSIMILATION_PERIOD_SECONDS}=$(( 2*ob_offset ))=" input.nml
+
+#
+#-----------------------------------------------------------------------
+#
+# Run DART filter program
+#
+#-----------------------------------------------------------------------
+#
 
 if [[ ${START_TYPE} == "warm" ]] || [[ ${START_TYPE} == "cold" && ${COLDSTART_CYCS_DO_DA^^} == "TRUE" ]]; then
   export OMP_NUM_THREADS=1

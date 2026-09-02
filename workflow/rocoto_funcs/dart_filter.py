@@ -12,7 +12,10 @@ def dart_filter(xmlFile, expdir):
     else:
         cycledefs = 'prod'
     # Task-specific EnVars beyond the task_common_vars
+    extrn_mdl_source = os.getenv('IC_EXTRN_MDL_NAME', 'IC_PREFIX_not_defined')
     dcTaskEnv = {
+        'EXTRN_MDL_SOURCE': f'{extrn_mdl_source}',
+        'COLDSTART_CYCS_DO_DA': os.getenv('COLDSTART_CYCS_DO_DA', 'TRUE').upper(),
         'ENS_SIZE': os.getenv("ENS_SIZE", '5'),
     }
     task_id = "dart_filter"

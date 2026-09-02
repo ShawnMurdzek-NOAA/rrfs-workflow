@@ -37,20 +37,20 @@
 &filter_nml
    async                    = 0
    adv_ens_command          = './advance_model.csh'
-   ens_size                 = 30
+   ens_size                 = {ENS_SIZE}
    output_members           = .true.
    obs_sequence_in_name     = 'obs_seq.out'
    obs_sequence_out_name    = 'obs_seq.final'
    input_state_file_list    = 'filter_in.txt'
    output_state_file_list   = 'filter_out.txt'
-   init_time_days           = -1
-   init_time_seconds        = -1
-   first_obs_days           = -1
-   first_obs_seconds        = -1
-   last_obs_days            = -1
-   last_obs_seconds         = -1
+   init_time_days           = {INIT_TIME_DAYS}
+   init_time_seconds        = {INIT_TIME_SECONDS}
+   first_obs_days           = {FIRST_OBS_DAYS}
+   first_obs_seconds        = {FIRST_OBS_SECONDS}
+   last_obs_days            = {LAST_OBS_DAYS}
+   last_obs_seconds         = {LAST_OBS_SECONDS}
    num_output_state_members = 0
-   num_output_obs_members   = 30
+   num_output_obs_members   = {ENS_SIZE}
    output_interval          = 1
    num_groups               = 1
    distributed_state        = .true.
@@ -170,9 +170,9 @@
 
 
 &model_nml
-   init_template_filename       = 'invariant.nc'
+   init_template_filename       = 'mpas_template.nc'
    assimilation_period_days     = 0
-   assimilation_period_seconds  = 3600
+   assimilation_period_seconds  = {ASSIMILATION_PERIOD_SECONDS}
    model_perturbation_amplitude = 0.0001
    vert_localization_coord      = 3
    calendar                     = 'Gregorian'
