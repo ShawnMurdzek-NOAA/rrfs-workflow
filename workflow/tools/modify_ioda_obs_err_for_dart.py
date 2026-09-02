@@ -6,14 +6,13 @@ Obs errors come from a GSI-style errtable.rrfs file
 shawn.s.murdzek@noaa.gov
 """
 
-#---------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 # Import Modules
-#---------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 
 import datetime as dt
 import sys
 import argparse
-import copy
 import numpy as np
 import xarray as xr
 import pandas as pd
@@ -21,9 +20,9 @@ import metpy.calc as mc
 from metpy.units import units
 
 
-#---------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 # Main Program
-#---------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 
 def parse_in_args(argv):
     """
@@ -84,7 +83,7 @@ def read_errtable(fname):
 
     Notes
     -----
-    More information about the errtable format in GSI can be found here: 
+    More information about the errtable format in GSI can be found here:
     https://dtcenter.ucar.edu/com-GSI/users/docs/users_guide/html_v3.7/gsi_ch4.html#conventional-observation-errors
 
     """
@@ -97,14 +96,14 @@ def read_errtable(fname):
     # Loop over each line
     errors = {}
     headers = ['prs', 'Terr', 'RHerr', 'UVerr', 'PSerr', 'PWerr']
-    for l in contents:
-        if l[5:21] == 'OBSERVATION TYPE':
-            key = int(l[1:4])
+    for line in contents:
+        if line[5:21] == 'OBSERVATION TYPE':
+            key = int(line[1:4])
             errors[key] = {}
             for h in headers:
                 errors[key][h] = []
         else:
-            vals = l.strip().split(' ')
+            vals = line.strip().split(' ')
             for k, h in enumerate(headers):
                 errors[key][h].append(float(vals[k]))
 
@@ -178,7 +177,7 @@ def modify_ioda(ioda, err_dict):
             all_prs = ioda['MetaData']['pressure'].values[cond]
 
             # Interpolate obs errors based on pressure
-            ioda['ObsError'][v].values[cond] = np.interp(all_prs, 
+            ioda['ObsError'][v].values[cond] = np.interp(all_prs,
                                                          obs_errors[t]['prs'],
                                                          obs_errors[t][ioda2err[v]])
 
@@ -199,16 +198,19 @@ if __name__ == '__main__':
 
     # Read in input files
     param = parse_in_args(sys.argv[1:])
-    if param.verbose == 1: print('Reading inputs...')
+    if param.verbose == 1:
+        print('Reading inputs...')
     obs_errors = read_errtable(param.err_file)
     ioda_tree = xr.open_datatree(param.ioda_file)
 
     # Modify IODA file
-    if param.verbose == 1: print('Modifying IODA files...')
+    if param.verbose == 1:
+        print('Modifying IODA files...')
     ioda_tree = modify_ioda(ioda_tree, obs_errors)
 
     # Write modified IODA file
-    if param.verbose == 1: print('Writing output...')
+    if param.verbose == 1:
+        print('Writing output...')
     ioda_tree.to_netcdf(param.out_fname)
 
     print('\nProgram finished!')
