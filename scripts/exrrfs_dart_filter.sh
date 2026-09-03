@@ -74,7 +74,6 @@ nlevel=$(wc -l < "${zeta_levels}")
 ln -snf "${FIXrrfs}/${MESH_NAME}/${MESH_NAME}.invariant.nc_L${nlevel}_${prefix}" ./invariant.nc
 ${cpreq} "${UMBRELLA_PREP_IC_DATA}/mem001/${initial_file}" mpas_template.nc
 ncks -A invariant.nc mpas_template.nc
-cd "${DATA}" || exit 1
 
 # copy namelist
 cd "${DATA}" || exit 1
@@ -119,6 +118,8 @@ if [[ ${START_TYPE} == "warm" ]] || [[ ${START_TYPE} == "cold" && ${COLDSTART_CY
   cp obs_seq.out "${COMOUT}/dart_filter/${WGF}"
   cp obs_seq.final "${COMOUT}/dart_filter/${WGF}"
   cp dart_log.out "${COMOUT}/dart_filter/${WGF}"
+  cp dart_log.nml "${COMOUT}/dart_filter/${WGF}"
+  cp input.nml "${COMOUT}/dart_filter/${WGF}"
 
 else
   echo "INFO: No DA at the cold start cycle"

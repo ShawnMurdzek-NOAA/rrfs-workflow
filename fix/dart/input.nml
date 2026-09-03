@@ -224,8 +224,6 @@
   update_analysis_file_list = 'filter_out.txt'
   update_boundary_file_list = 'mpas_lbcs.txt'
   mpas_lbc_variables = 'lbc_qv', 'lbc_theta', 'lbc_rho', 'lbc_u'
-  lbc_update_from_reconstructed_winds = .false.
-  lbc_update_winds_from_increments    = .false.
   debug = 0
 /
 

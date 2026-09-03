@@ -12,7 +12,7 @@ def dart_filter(xmlFile, expdir):
     else:
         cycledefs = 'prod'
     # Task-specific EnVars beyond the task_common_vars
-    extrn_mdl_source = os.getenv('IC_EXTRN_MDL_NAME', 'IC_PREFIX_not_defined')
+    extrn_mdl_source = os.getenv('IC_EXTRN_MDL_NAME', 'IC_EXTRN_MDL_NAME_not_defined')
     DART_DA_HALF_WINDOW = os.getenv("DART_DA_HALF_WINDOW", 'DART_DA_HALF_WINDOW_not_defined')
     dcTaskEnv = {
         'EXTRN_MDL_SOURCE': f'{extrn_mdl_source}',

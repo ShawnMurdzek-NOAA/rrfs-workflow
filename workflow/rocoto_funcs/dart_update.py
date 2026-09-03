@@ -12,8 +12,10 @@ def dart_update(xmlFile, expdir):
     else:
         cycledefs = 'prod'
     # Task-specific EnVars beyond the task_common_vars
+    extrn_mdl_source = os.getenv('IC_EXTRN_MDL_NAME', 'IC_EXTRN_MDL_NAME_not_defined')
     dcTaskEnv = {
         'ENS_SIZE': os.getenv("ENS_SIZE", '5'),
+        'EXTRN_MDL_SOURCE': f'{extrn_mdl_source}',
     }
     task_id = "dart_update"
 
