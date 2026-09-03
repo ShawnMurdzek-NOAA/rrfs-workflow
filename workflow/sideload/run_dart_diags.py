@@ -5,24 +5,24 @@ Plot observation-space diagnostics for DART experiments using pyDARTdiags and ob
 shawn.s.murdzek@noaa.gov
 """
 
-#---------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 # Import Modules
-#---------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 
 import datetime as dt
 import numpy as np
 
 import matplotlib
-matplotlib.use('Agg')  # to prevent plots from poppin up
-import matplotlib.pyplot as plt
+matplotlib.use('Agg')  # Prevents plots from popping up owing to plt.show() in pyDARTdiag.matplots functions
+import matplotlib.pyplot as plt  # noqa: E402
 
-import pydartdiags.obs_sequence.obs_sequence as obsq
-from pydartdiags.matplots import matplots as mp
+from pydartdiags.matplots import matplots as mp  # noqa: E402
+import pydartdiags.obs_sequence.obs_sequence as obsq  # noqa: E402
 
 
-#---------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 # Program
-#---------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 
 def plot_vprofs(obs):
     """
@@ -38,7 +38,7 @@ def plot_vprofs(obs):
     # plvls is in Pa
     plvls = np.arange(0, 100001, 5000)
     for t in all_types:
-        fig = mp.plot_profile(obs, plvls, t, bias=True, rmse=True, totalspread=True)
+        fig = mp.plot_profile(obs, plvls, t, bias=True, rmse=True, totalspread=True)  # noqa: F841
         plt.savefig(f"vprof_{t}.png", dpi=200)
 
     return None
@@ -67,7 +67,7 @@ def plot_rank_hist(obs):
 
     # Make a separate plot for each type
     for t in all_types:
-        fig = mp.plot_rank_histogram(obs, t, ens_size)
+        fig = mp.plot_rank_histogram(obs, t, ens_size)  # noqa: F841
         plt.savefig(f"rank_hist_{t}.png", dpi=200)
 
     return None
