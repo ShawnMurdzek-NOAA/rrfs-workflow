@@ -194,7 +194,8 @@ def modify_ioda(ioda, err_dict):
 if __name__ == '__main__':
 
     start = dt.datetime.now()
-    print('Starting modify_ioda_obs_err_for_dart.py')
+    pgm_name = 'modify_ioda_obs_err_for_dart.py'
+    print(f"Starting {pgm_name}")
     print(f"Time = {start.strftime('%Y%m%d %H:%M:%S')}\n")
 
     # Read in input files
@@ -214,8 +215,8 @@ if __name__ == '__main__':
         print('Writing output...')
     ioda_tree.to_netcdf(param.out_fname)
 
-    print('\nProgram finished!')
-    print(f"Elapsed time = {(dt.datetime.now() - start).total_seconds()} s")
+    print(f"\nFinished {pgm_name}")
+    print(f"Elapsed time = {(dt.datetime.now() - start).total_seconds()} s\n")
 
 
 """
