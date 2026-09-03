@@ -9,9 +9,11 @@ def dart_obs_proc(xmlFile, expdir):
     task_id = 'dart_obs_proc'
     cycledefs = 'prod'
     OBSPATH = os.getenv("OBSPATH", 'OBSPATH_not_defined')
+    DART_DA_HALF_WINDOW = os.getenv("DART_DA_HALF_WINDOW", 'DART_DA_HALF_WINDOW_not_defined')
     # Task-specific EnVars beyond the task_common_vars
     dcTaskEnv = {
-        'OBSPATH': f'{OBSPATH}'
+        'OBSPATH': f'{OBSPATH}',
+        'DART_DA_HALF_WINDOW': f'{DART_DA_HALF_WINDOW}',
     }
 
     dcTaskEnv['KEEPDATA'] = get_cascade_env(f"KEEPDATA_{task_id}".upper()).upper()

@@ -22,10 +22,9 @@ ref_time=$(TZ=UTC date -d "16010101" +%s)
 cdate_sec=$(TZ=UTC date -d "${CDATE:0:8} ${CDATE:8:2}" +%s)
 diff=$(( cdate_sec - ref_time ))
 
-# Only consider obs within ob_offset sec of analysis time
-ob_offset=5400
-ob_start=$(( diff - ob_offset ))
-ob_end=$(( diff + ob_offset ))
+# Only consider obs within DART_DA_HALF_WINDOW sec of analysis time
+ob_start=$(( diff - DART_DA_HALF_WINDOW ))
+ob_end=$(( diff + DART_DA_HALF_WINDOW ))
 
 first_obs_days="$(( ob_start / 86400 ))"
 first_obs_seconds="$(( ob_start % 86400 ))"
@@ -96,7 +95,7 @@ sed -i "s={FIRST_OBS_DAYS}=${first_obs_days}=" input.nml
 sed -i "s={FIRST_OBS_SECONDS}=${first_obs_seconds}=" input.nml
 sed -i "s={LAST_OBS_DAYS}=${last_obs_days}=" input.nml
 sed -i "s={LAST_OBS_SECONDS}=${last_obs_seconds}=" input.nml
-sed -i "s={ASSIMILATION_PERIOD_SECONDS}=$(( 2*ob_offset ))=" input.nml
+sed -i "s={ASSIMILATION_PERIOD_SECONDS}=$(( 2*DART_DA_HALF_WINDOW ))=" input.nml
 
 #
 #-----------------------------------------------------------------------

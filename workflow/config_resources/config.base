@@ -121,6 +121,9 @@ export NODES_DA=${NODES_DA:-"<nodes>1:ppn=40</nodes>"}
 # DART
 export NODES_DART_FILTER=${NODES_DART_FILTER:-"<nodes>4:ppn=20</nodes>"}
 
+# DART DA half window in seconds
+export DART_DA_HALF_WINDOW=${DART_DA_HALF_WINDOW:-"2700"}
+
 # nonvar_cldana
 export NODES_NONVAR_CLDANA=${NODES_NONVAR_CLDANA:-"<nodes>1:ppn=40</nodes>"}
 export WALLTIME_NONVAR_CLDANA=${WALLTIME_NONVAR_CLDANA:-"00:20:00"}
