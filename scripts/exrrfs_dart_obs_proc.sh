@@ -47,16 +47,16 @@ for ob in ${all_obs[@]}; do
 
     # Filter obs based on timeOffset
     ${HOMErrfs}/workflow/tools/filter_ioda_by_timeOffset.py \
-	    ${ioda_name} \
-	    --min -${DART_DA_HALF_WINDOW} \
-	    --max ${DART_DA_HALF_WINDOW} \
-	    --out_fname ${ioda_filter}
+            ${ioda_name} \
+            --min -${DART_DA_HALF_WINDOW} \
+            --max ${DART_DA_HALF_WINDOW} \
+            --out_fname ${ioda_filter}
 
     # Add obs errors to IODA file
     ${HOMErrfs}/workflow/tools/modify_ioda_obs_err_for_dart.py \
-	    ${ioda_filter} \
-	    errtable.rrfs \
-	    --out_fname ${ioda_err}
+            ${ioda_filter} \
+            errtable.rrfs \
+            --out_fname ${ioda_err}
 
     # Convert to obs_seq file
     python -m pyjedi.ioda2obsq ${pyjedi_yaml} ${ioda_err} ${obs_seq_out}
