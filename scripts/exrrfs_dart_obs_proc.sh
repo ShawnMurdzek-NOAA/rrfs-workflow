@@ -3,7 +3,6 @@
 declare -rx PS4='+${SECONDS}s $(basename ${BASH_SOURCE[0]:-${FUNCNAME[0]:-"Unknown"}})[${LINENO}]: '
 set -x
 
-prefix=${EXTRN_MDL_SOURCE%_NCO} # remove the trailing '_NCO' if any
 cpreq=${cpreq:-cpreq}
 cd "${DATA}" || exit 1
 
@@ -46,7 +45,7 @@ for ob in ${all_obs[@]}; do
     ln -snf "${FIXrrfs}/dart/${pyjedi_yaml}" .
 
     # Add obs errors to IODA file
-    python ${HOMErrfs}/workflow/tools/modify_ioda_obs_err_for_dart.py ${ioda_name} errtable.rrfs --out_fname ${ioda_err}
+    ${HOMErrfs}/workflow/tools/modify_ioda_obs_err_for_dart.py ${ioda_name} errtable.rrfs --out_fname ${ioda_err}
 
     # Convert to obs_seq file
     python -m pyjedi.ioda2obsq ${pyjedi_yaml} ${ioda_err} ${obs_seq_out}

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Modify IODA obs errors so they can be used in DART
 

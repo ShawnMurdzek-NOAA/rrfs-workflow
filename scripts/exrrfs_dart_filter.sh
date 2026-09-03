@@ -19,7 +19,7 @@ cd "${DATA}" || exit 1
 # Must specify timezone as UTC, otherwise difference is incorrect
 # (this is because they had no timezones in 1601)
 ref_time=$(TZ=UTC date -d "16010101" +%s)
-cdate_sec=$(TZ=UTC date -d "${CDATE::8} ${CDATE:8:2}" +%s)
+cdate_sec=$(TZ=UTC date -d "${CDATE:0:8} ${CDATE:8:2}" +%s)
 diff=$(( cdate_sec - ref_time ))
 
 # Only consider obs within ob_offset sec of analysis time
