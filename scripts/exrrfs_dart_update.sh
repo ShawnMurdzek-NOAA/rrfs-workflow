@@ -86,16 +86,12 @@ if [[ ${START_TYPE} == "warm" ]] || [[ ${START_TYPE} == "cold" && ${COLDSTART_CY
   err_chk
 
   # Update LBCs
-  # Currently no working
-  echo 
-  echo "LBC update not enabled yet. Skipping."
-  echo
-  #source prep_step
-  #export pgm="update_bc"
-  #${cpreq} "${HOMErrfs}"/workflow/sideload/DART/models/mpas_atm/work/${pgm} .
-  #./${pgm}
-  #export err=$?
-  #err_chk
+  source prep_step
+  export pgm="update_bc"
+  ${cpreq} "${HOMErrfs}"/workflow/sideload/DART/models/mpas_atm/work/${pgm} .
+  ./${pgm}
+  export err=$?
+  err_chk
 
 else
   echo "INFO: No DA at the cold start cycle"

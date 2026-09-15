@@ -221,7 +221,7 @@
   /
 
 &update_bc_nml
-  update_analysis_file_list = 'filter_out.txt'
+  update_analysis_file_list = 'mpas_ics.txt'
   update_boundary_file_list = 'mpas_lbcs.txt'
   mpas_lbc_variables = 'lbc_qv', 'lbc_theta', 'lbc_rho', 'lbc_u'
   debug = 0
