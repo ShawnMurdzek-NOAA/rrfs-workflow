@@ -32,7 +32,7 @@ def dart_update(xmlFile, expdir):
         taskdep = f'\n    <taskdep task="dart_filter"/>'
     prep_lbc_dep = ''
     if "global" not in os.getenv("MESH_NAME"):
-        for i in range(1, int(ens_size)+1):
+        for i in range(1, int(ens_size) + 1):
             prep_lbc_dep = prep_lbc_dep + f'\n    <taskdep task="prep_lbc_m{i:03d}" cycle_offset="0:00:00"/>'
     #
     dependencies = f'''
