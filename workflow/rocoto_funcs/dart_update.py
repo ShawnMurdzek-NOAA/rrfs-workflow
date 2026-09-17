@@ -13,8 +13,9 @@ def dart_update(xmlFile, expdir):
         cycledefs = 'prod'
     # Task-specific EnVars beyond the task_common_vars
     extrn_mdl_source = os.getenv('IC_EXTRN_MDL_NAME', 'IC_EXTRN_MDL_NAME_not_defined')
+    ens_size = os.getenv("ENS_SIZE", '5')
     dcTaskEnv = {
-        'ENS_SIZE': os.getenv("ENS_SIZE", '5'),
+        'ENS_SIZE': ens_size,
         'EXTRN_MDL_SOURCE': f'{extrn_mdl_source}',
     }
     task_id = "dart_update"
@@ -29,10 +30,14 @@ def dart_update(xmlFile, expdir):
         timedep = f'\n    <timedep><cyclestr offset="{starttime}">@Y@m@d@H@M00</cyclestr></timedep>'
     else:
         taskdep = f'\n    <taskdep task="dart_filter"/>'
+    prep_lbc_dep = ''
+    if "global" not in os.getenv("MESH_NAME"):
+        for i in range(1, int(ens_size)+1):
+            prep_lbc_dep = prep_lbc_dep + f'\n    <taskdep task="prep_lbc_m{i:03d}" cycle_offset="0:00:00"/>'
     #
     dependencies = f'''
   <dependency>
-  <and>{timedep}{taskdep}
+  <and>{timedep}{taskdep}{prep_lbc_dep}
   </and>
   </dependency>'''
 
