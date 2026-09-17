@@ -33,6 +33,7 @@ def mpassit(xmlFile, expdir, index, dcGrpInfo, do_ensemble=False, do_ensmean_pos
         'MPASSIT_REF_LAT': os.getenv('MPASSIT_REF_LAT', 'MPASSIT_REF_LAT_not_defined'),
         'MPASSIT_REF_LON': os.getenv('MPASSIT_REF_LON', 'MPASSIT_REF_LON_not_defined'),
         'EXTRN_MDL_SOURCE': f'{extrn_mdl_source}',
+        'LSM_SCHEME': os.getenv('LSM_SCHEME', 'sf_ruc'),
     }
 
     if os.getenv('DO_CHEMISTRY', 'FALSE').upper() == "TRUE":
@@ -80,6 +81,9 @@ def mpassit(xmlFile, expdir, index, dcGrpInfo, do_ensemble=False, do_ensmean_pos
       <datadep age="00:00:10"><cyclestr>&DATAROOT;/@Y@m@d/&RUN;_fcst_@H_&rrfs_ver;/&WGF;{memdir}</cyclestr><cyclestr offset="{end_hr}:00:00">/history.@Y-@m-@d_@H.@M.@S.nc.done</cyclestr></datadep>
       <datadep age="00:00:10"><cyclestr>&DATAROOT;/@Y@m@d/&RUN;_fcst_@H_&rrfs_ver;/&WGF;{memdir}</cyclestr><cyclestr offset="{end_hr}:00:00">/diag.@Y-@m-@d_@H.@M.@S.nc.done</cyclestr></datadep>
       <taskdep task="fcst{ensindexstr}"/>
+      <taskdep task="fcst_l{ensindexstr}"/>
+      <taskdep task="fcst_xl{ensindexstr}"/>
+      <taskdep task="fcst_xxl{ensindexstr}"/>
     </or>'''
     #
     if do_ensmean_post:

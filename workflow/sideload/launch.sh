@@ -177,12 +177,16 @@ case ${task_id} in
     export PYTHONPATH=$PYTHONPATH:"${HOMErrfs}/workflow/sideload/pyDARTdiags/src"
     "${HOMErrfs}/jobs/JRRFS_DART_OBS_PROC"
     ;;
-  pydamonitor)
+  pydamonitor*)
     module purge
     set +x
     source "${HOMErrfs}/workflow/sideload/pyDAmonitor/ush/load_pyDAmonitor.sh"
     set -x
-    "${HOMErrfs}/workflow/sideload/pyDAmonitor/ush/drive.sh"
+    if [[ "${task_id^^}" == "PYDAMONITOR_SPINUP" ]]; then
+      "${HOMErrfs}/workflow/sideload/pyDAmonitor/ush/drive.sh" spinup
+    else
+      "${HOMErrfs}/workflow/sideload/pyDAmonitor/ush/drive.sh"
+    fi
     ;;
   dart_diags)
     module purge

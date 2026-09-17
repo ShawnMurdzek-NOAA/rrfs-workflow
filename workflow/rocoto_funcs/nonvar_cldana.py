@@ -23,6 +23,7 @@ def nonvar_cldana(xmlFile, expdir, do_ensemble=False, spinup_mode=0):
     extrn_mdl_source = os.getenv('IC_EXTRN_MDL_NAME', 'IC_PREFIX_not_defined')
     dcTaskEnv = {
         'EXTRN_MDL_SOURCE': f'{extrn_mdl_source}',
+        'SAVE_CLDANA': os.getenv('SAVE_CLDANA', 'FALSE').upper(),
     }
     if do_spinup:
         dcTaskEnv['DO_SPINUP'] = 'TRUE'
@@ -66,7 +67,10 @@ def nonvar_cldana(xmlFile, expdir, do_ensemble=False, spinup_mode=0):
         da_dep = f'\n    <taskdep task="dart_update"/>'
     elif os.getenv("DO_JEDI", "FALSE").upper() == "TRUE":
         if os.getenv("DO_ENSEMBLE", "FALSE").upper() == "TRUE":
-            da_dep = f'\n    <taskdep task="getkf_solver"/>'
+            if os.getenv("GETKF_ONESTEP", "TRUE").upper() == "FALSE":
+                da_dep = f'\n    <taskdep task="getkf_solver"/>'
+            else:
+                da_dep = f'\n    <taskdep task="getkf"/>'
         elif do_spinup:
             da_dep = f'\n    <taskdep task="jedivar_spinup"/>'
         else:
@@ -83,5 +87,5 @@ def nonvar_cldana(xmlFile, expdir, do_ensemble=False, spinup_mode=0):
   </dependency>'''
     #
     xml_task(xmlFile, expdir, task_id, cycledefs, dcTaskEnv, dependencies,
-             metatask, meta_id, meta_bgn, meta_end)
+             metatask, meta_id, meta_bgn, meta_end, command_id="NONVAR_CLDANA")
 # end of nonvar_cldana --------------------------------------------------------

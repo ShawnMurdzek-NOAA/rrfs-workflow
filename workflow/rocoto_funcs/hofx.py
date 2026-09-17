@@ -15,6 +15,8 @@ def hofx(xmlFile, expdir, do_spinup=False):
     dcTaskEnv = {
         'EXTRN_MDL_SOURCE': os.getenv('IC_EXTRN_MDL_NAME', 'IC_PREFIX_not_defined'),
         'PHYSICS_SUITE': os.getenv('PHYSICS_SUITE', 'PHYSICS_SUITE_not_defined'),
+        'LSM_SCHEME': os.getenv('LSM_SCHEME', 'sf_ruc'),
+        'NSOIL_LEVELS': os.getenv('NSOIL_LEVELS', '9'),
         'EMPTY_OBS_SPACE_ACTION': os.getenv('EMPTY_OBS_SPACE_ACTION', 'skip output'),
         'HOFX_FHRS': os.getenv('HOFX_FHRS', '001'),
         'IODA_PATH': f'{COMROOT}/{NET}/{rrfs_ver}'
@@ -30,7 +32,12 @@ def hofx(xmlFile, expdir, do_spinup=False):
     #
     dependencies = f'''
   <dependency>{timedep}
-    <taskdep task="fcst"/>
+    <or>
+      <taskdep task="fcst"/>
+      <taskdep task="fcst_l"/>
+      <taskdep task="fcst_xl"/>
+      <taskdep task="fcst_xxl"/>
+    </or>
   </dependency>'''
     #
     xml_task(xmlFile, expdir, task_id, cycledefs, dcTaskEnv, dependencies, command_id="hofx")

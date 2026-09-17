@@ -50,7 +50,9 @@ start_time=$(date -d "${CDATE:0:8} ${CDATE:8:2}" +%Y-%m-%d_%H:%M:%S)
 run_duration=${fcst_len_hrs_thiscyc:-1}:00:00
 physics_suite=${PHYSICS_SUITE:-'mesoscale_reference'}
 lsm_scheme=${LSM_SCHEME:-'sf_ruc'}
+nsoillevels=${NSOIL_LEVELS:-9}
 jedi_da=true #true
+do_sppt=${DO_SPPT:-'false'}
 
 pio_num_iotasks=${NODES}
 pio_stride=${PPN}
@@ -125,10 +127,8 @@ fi
 for fhr in ${mpasout_all[@]}; do
   CDATEp=$( ${NDATE} "${fhr}" "${CDATE}" )
   timestr=$(date -d "${CDATEp:0:8} ${CDATEp:8:2}" +%Y-%m-%d_%H.%M.%S)
-  if [[ "${DO_SPINUP:-FALSE}" != "TRUE" ]];  then
-    ln -snf "${UMBRELLA_FCST_DATA}/mpasout.${timestr}.nc" "${DATA}/"
-    ln -snf "${UMBRELLA_FCST_DATA}/mpasout.${timestr}.nc.done" "${DATA}/"
-  fi
+  ln -snf "${UMBRELLA_FCST_DATA}/mpasout.${timestr}.nc" "${DATA}/"
+  ln -snf "${UMBRELLA_FCST_DATA}/mpasout.${timestr}.nc.done" "${DATA}/"
 done
 
 # run the MPAS model
