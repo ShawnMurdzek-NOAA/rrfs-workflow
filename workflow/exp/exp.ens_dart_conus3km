@@ -147,7 +147,7 @@ case ${MACHINE} in
       export NODES_GETKF="<nodes>40:ppn=20</nodes>"
       export NODES_DART_FILTER="<nodes>40:ppn=20</nodes>"
       export WALLTIME_DART_FILTER="01:15:00"
-      export MEMORY_DART_UPDATE="10G"
+      export MEMORY_DART_UPDATE="25G"
       export NODES_RECENTER="<nodes>1:ppn=32</nodes>"
     fi
     ;;
