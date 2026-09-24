@@ -245,6 +245,8 @@ class objTask:
                 text = text + f'  <partition>{self.dcTaskRes["partition"]}</partition>\n'
         text = text + f'  <walltime>{self.dcTaskRes["walltime"]}</walltime>\n'
         text = text + f'  {self.dcTaskRes["nodes"]}\n'  # note: xml tag self included, no need to add <nodes> </nodes>
+        if len(self.dcTaskRes["memory"]) > 0:
+            text = text + f'  <memory>{self.dcTaskRes["memory"]}</memory>\n'
         #
         native_text = ''
         if self.dcTaskRes["reservation"] != "":
@@ -347,6 +349,7 @@ def xml_task(
         'partition': get_cascade_env(f"PARTITION_{task_id}".upper()),
         'walltime': get_cascade_env(f"WALLTIME_{task_id}".upper()),
         'nodes': get_cascade_env(f"NODES_{task_id}".upper()),
+        'memory': get_cascade_env(f"MEMORY_{task_id}".upper()),
         'reservation': get_cascade_env(f"RESERVATION_{task_id}".upper()),
         'cluster': get_cascade_env(f"CLUSTER_{task_id}".upper()),
         'native': get_cascade_env(f"NATIVE_{task_id}".upper())
