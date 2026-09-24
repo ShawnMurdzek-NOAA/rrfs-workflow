@@ -26,7 +26,7 @@ timestr=$(date -d "${CDATE:0:8} ${CDATE:8:2}" +%Y-%m-%d_%H.%M.%S)
 #
 
 # determine whether to begin new cycles and link correct ensembles
-if [[ -r "${UMBRELLA_PREP_IC_DATA}/mem001/init.nc" ]]; then
+if [[ -r "${UMBRELLA_PREP_IC_DATA}/init.nc" ]]; then
   export START_TYPE='cold'
   initial_file='init.nc'
 else
@@ -34,31 +34,23 @@ else
   initial_file='mpasout.nc'
 fi
 
-# link ensembles members and define input/output files
-# list_ana : List of analyses from DART filter (only include state variables)
-list_ics="mpas_ics.txt"
-list_lbcs="mpas_lbcs.txt"
-list_ana="filter_out.txt"
-touch ${list_ics}
-touch ${list_lbcs}
-touch ${list_ana}
+# link ensembles member and define input/output files
+
 mkdir -p mpas_ics
 mkdir -p mpas_lbcs
 mkdir -p filter_out
-for i in $(seq -w 001 "${ENS_SIZE}"); do
-  ln -snf "${UMBRELLA_PREP_IC_DATA}/mem${i}/${initial_file}" "mpas_ics/mem${i}.nc"
-  ln -snf "${UMBRELLA_PREP_LBC_DATA}/mem${i}/lbc.${timestr}.nc" "mpas_lbcs/mem${i}.nc"
-  ln -snf "${UMBRELLA_DART_FILTER_DATA}/ens_out/mem${i}.nc" "filter_out/mem${i}.nc"
-  echo "mpas_ics/mem${i}.nc" >> ${list_ics}
-  echo "mpas_lbcs/mem${i}.nc" >> ${list_lbcs}
-  echo "filter_out/mem${i}.nc" >> ${list_ana}
-done
+ln -snf "${UMBRELLA_PREP_IC_DATA}/${initial_file}" "mpas_ics/mem${ENS_INDEX}.nc"
+ln -snf "${UMBRELLA_PREP_LBC_DATA}/lbc.${timestr}.nc" "mpas_lbcs/mem${ENS_INDEX}.nc"
+ln -snf "${UMBRELLA_DART_FILTER_DATA}/ens_out/mem${ENS_INDEX}.nc" "filter_out/mem${ENS_INDEX}.nc"
+echo "mpas_ics/mem${ENS_INDEX}.nc" > mpas_ics.txt
+echo "mpas_lbcs/mem${ENS_INDEX}.nc" > mpas_lbcs.txt
+echo "filter_out/mem${ENS_INDEX}.nc" > filter_out.txt
 
 # create a template netCDF file with both mpasout and invariant information
 zeta_levels=${EXPDIR}/config/ZETA_LEVELS.txt
 nlevel=$(wc -l < "${zeta_levels}")
 ln -snf "${FIXrrfs}/${MESH_NAME}/${MESH_NAME}.invariant.nc_L${nlevel}_${prefix}" ./invariant.nc
-${cpreq} "${UMBRELLA_PREP_IC_DATA}/mem001/${initial_file}" mpas_template.nc
+${cpreq} "${UMBRELLA_PREP_IC_DATA}/${initial_file}" mpas_template.nc
 ncks -A invariant.nc mpas_template.nc
 
 # copy namelist
@@ -96,5 +88,8 @@ if [[ ${START_TYPE} == "warm" ]] || [[ ${START_TYPE} == "cold" && ${COLDSTART_CY
 else
   echo "INFO: No DA at the cold start cycle"
 fi
+
+# Clean
+rm mpas_template.nc
 
 exit 0

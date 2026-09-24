@@ -25,7 +25,7 @@ def dart_diags(xmlFile, expdir, spinup_mode=0):
         starttime = get_cascade_env(f"STARTTIME_{task_id}".upper())
         timedep = f'\n    <timedep><cyclestr offset="{starttime}">@Y@m@d@H@M00</cyclestr></timedep>'
     #
-    taskdep = '\n    <taskdep task="dart_update"/>'
+    taskdep = '\n    <taskdep task="dart_filter"/>'
     #
     dependencies = f'''
   <dependency>

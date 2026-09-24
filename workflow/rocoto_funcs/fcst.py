@@ -134,7 +134,7 @@ def fcst(xmlFile, expdir, do_ensemble=False, dcEnsGrpInfo=None, do_spinup=False,
 
     if os.getenv("DO_DART", "FALSE").upper() == "TRUE":
         do_da = True
-        dart_dep = f'\n    <taskdep task="dart_update"/>'
+        dart_dep = f'\n    <taskdep task="dart_update{ensindexstr}"/>'
 
     if os.getenv("DO_RECENTER", "FALSE").upper() == "TRUE":
         if os.getenv("DO_ENSEMBLE", "FALSE").upper() == "TRUE":
