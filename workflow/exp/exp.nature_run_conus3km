@@ -17,7 +17,7 @@ export ZETA_LEVELS="L60.txt"
 #
 export USE_MERRA2=false  # false: default GOCART aerosol climatology; true: MERRA2 aerosol climatology
 #
-export cyclethrottle=1  # We only want to run the first cycle
+export CYCLETHROTTLE=1  # We only want to run the first cycle
 #
 export DO_IODA=false
 export DO_JEDI=false
@@ -62,7 +62,7 @@ export LBC_INTERVAL=1
 export LBC_UNGRIB_GROUP_TOTAL_NUM=2
 export LBC_GROUP_TOTAL_NUM=2
 
-export RETRO_PERIOD="2024050600-2024050612"
+export RETRO_PERIOD="2024050600-2024050603"
 export LBC_CYCS="00 12"  # evenly divide 24 hours, e.g., "00 12", "00 06 12 18", etc
 export COLDSTART_CYCS="00 12"   # cycles to cold start from external models
 export DO_SPINUP=false
