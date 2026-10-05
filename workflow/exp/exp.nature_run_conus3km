@@ -8,7 +8,7 @@ export WGF="det"   # working group function = "det", "enkf", "ens", "firewx"
 export EXP_NAME=NR_2024050600_2024050900
 export VERSION=$(cat ./VERSION)
 export TAG=d3km
-export OPSROOT=/work2/noaa/zrtrr/murdzek/cloud_da_dart/rrfs_dart_runs/${EXP_NAME}
+export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run/${EXP_NAME}
 export EXPDIR=${OPSROOT}/exp/${NET}${WGF}
 export COMROOT=${OPSROOT}/com      # task input and output data as well as logs
 export DATAROOT=${OPSROOT}/stmp    # task workdirs ($DATA) which to be removed immediately upon task completion unless KEEPDATA=YES
@@ -53,7 +53,7 @@ export FCST_LEN_HRS_CYCLES="${arr[*]}"
 export HISTORY_INTERVAL=1
 export DIAG_INTERVAL=1
 export MPASOUT_TIMELEVELS="0 1"
-export POST_GROUP_TOT_NUM=2 # num of groups, the final group absorbs leftovers, the first group contains the extra f000h file
+export POST_GROUP_TOT_NUM=6 # num of groups, the final group absorbs leftovers, the first group contains the extra f000h file
 
 export IC_OFFSET=6
 export LBC_OFFSET=6
@@ -92,7 +92,7 @@ export NODES_UPP="<nodes>4:ppn=20</nodes>"
 export NODES_JEDIVAR="<nodes>80:ppn=10</nodes>"
 export NODES_MPAS_BLEND="<nodes>40:ppn=40</nodes>"
 #
-export WALLTIME_FCST="5:00:00"
+export WALLTIME_FCST="8:00:00"
 export WALLTIME_MPASSIT="2:00:00"
 export WALLTIME_UPP="2:00:00"
 export WALLTIME_JEDIVAR="00:30:00"
@@ -162,7 +162,7 @@ case ${MACHINE} in
     export OBSPATH="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/obs_rap"
     export OBSPATH_NSSLMOSAIC="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/reflectivity"
     export OBSPATH_AIRNOW="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/airnow"
-    export ACCOUNT="bil-fire10-oar"
+    export ACCOUNT="bil-pmp"
     export QUEUE="normal"
     export PARTITION="batch"
     export CLUSTER="c6"
