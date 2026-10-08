@@ -75,8 +75,8 @@ export PRODSWITCH_CYCS="09 21"  # cycles to PROD switch to the spun-up ICs
 #export PRODSWITCH_CYCS="09 21"
 #
 #export DO_PYDAMONITOR=true
-#export DO_GRAPHICS=true
-#export GRAPHICS_TILES="full NE NC NW SE SC SW EastCO"
+export DO_GRAPHICS=true
+export GRAPHICS_TILES="full NE NC NW SE SC SW"
 #export DO_ARCHIVE=true
 #export ARCHIVE_INTERVAL=3  # run the archive task every several hours
 #export ARCHIVE_HPSSDIR="/5year/BMC/wrfruc/Guoqing.Ge/${EXP_NAME}"
