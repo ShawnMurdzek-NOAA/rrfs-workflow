@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+# Aloha! This file is to setup some top level experiment options
+#
+# shellcheck disable=all
+export NET=rrfs                    # rrfs, rtma,
+export MESH_NAME=conus3km         # conus12km, conus3km, na12km, etc
+export WGF="det"   # working group function = "det", "enkf", "ens", "firewx"
+export EXP_NAME=MPAS_RAP
+export VERSION=$(cat ./VERSION)
+export TAG=mpas_rap
+export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run/${EXP_NAME}
+export EXPDIR=${OPSROOT}/exp/rrfs${WGF}
+export COMROOT=${OPSROOT}/com      # task input and output data as well as logs
+export DATAROOT=${OPSROOT}/stmp    # task workdirs ($DATA) which to be removed immediately upon task completion unless KEEPDATA=YES
+#
+#export SFC_UPDATE_SOURCE_DIR=/scratch3/BMC/rtwrfruc/RRFSv2X/NCO_dirs/MPAS_RAP
+#export NSST_SOURCE_DIR=/public/data/grids/ncep/sst/0p083deg/grib2
+#export LAKE_SOURCE_DIR=/public/data/grids/rrfs_a
+#
+export REALTIME=false
+export ZETA_LEVELS="L60.txt"
+#
+export DO_IODA=false
+export DO_JEDI=false
+export IC_ONLY=true
+#export SNUDGETYPES="GGG" # G=gsd_update_soiltq from GSI; P=2022 J Hydro paper; chars=SoilT,SnowT,SoilQ
+export DO_NONVAR_CLOUD_ANA=false
+export COLDSTART_CYCS_DO_DA=false
+export DO_CHEMISTRY=false
+export HYB_WGT_ENS=0.0
+export HYB_WGT_STATIC=1.0
+export HYB_ENS_TYPE=1      # 1.rrfs; 2.interpolated GEFS/GDAS; 0.TBD on the fly (rrfs->GDAS->3DVAR)
+export HYB_ENS_PATH=""     # if empty, the workflow will try to find ensembles automatically
+export DO_RADAR_REF=false  # does not work for 3DVar, only EnVar or GETKF
+export RADARREFL_TIMELEVEL="00"  # 00 15 30 45 min
+#export SAT_USELIST=""  # check config.base on how to set up this variable
+export ENS_SIZE=30
+export ENS_BEC_LOOK_BACK_HRS=1  # define the hours going back for ensemble forecast files for the ensemble BEC
+export DO_HOFX=false
+export HOFX_FHRS="000 001 012"
+#export DO_SFC_UPDATE=true # do sfc update at cold start cycs
+#export SFC_UPDATE_LOOK_BACK_HRS=1  # hours going back to look for surface update source files (mpasout)
+
+export STATIC_BEC_MODEL="GSIBEC" # the static bec model, GSIBEC and BUMPBEC
+export GSIBEC_X=40 #GSIBEC_X * GSIBEC_Y should match the number of MPI tasks
+export GSIBEC_Y=20
+
+export DO_CYC=true
+export CYC_INTERVAL=12
+for i in {0..23};    do arr[$i]="0"; done # 1hr fcst
+export FCST_LEN_HRS_CYCLES="${arr[*]}"
+export HISTORY_INTERVAL=1
+export DIAG_INTERVAL=1
+export MPASOUT_TIMELEVELS='0 1'
+export MPASSIT_GROUP_TOTAL_NUM=1
+export UPP_GROUP_TOTAL_NUM=1
+
+export IC_OFFSET=0
+export LBC_OFFSET=3
+export LBC_LENGTH=3
+export LBC_INTERVAL=1
+export LBC_UNGRIB_GROUP_TOTAL_NUM=1
+export LBC_GROUP_TOTAL_NUM=1
+export PREP_LBC_LOOK_BACK_HRS=11 # define the hours going back for prep_lbc to find lbc files
+
+export RETRO_PERIOD="2024050600-2024050623"
+export IC_CYCS="00 12"  # evenly divide 24 hours, e.g., "00 12", "00 06 12 18", etc
+export LBC_CYCS="00 12"  # evenly divide 24 hours, e.g., "00 12", "00 06 12 18", etc
+export COLDSTART_CYCS="00 12"   # cycles to cold start from external models
+#export DO_SPINUP=true
+#export SPINUP_CYCS="12 15"   # cycles to cold start from external models
+#export PRODSWITCH_CYCS="12 15"  # cycles to PROD switch to the spun-up ICs
+#
+# set as follows to start spinup at 03/15z
+#export DO_SPINUP=true
+#export IC_OFFSET=3
+#export COLDSTART_CYCS="03 15"
+#export PRODSWITCH_CYCS="09 21"
+#
+#export STARTTIME_UNGRIB_IC="00:00:01"
+#export STARTTIME_IC="00:00:01"
+export WALLTIME_IC="0:15:00"
+export WALLTIME_FCST="0:15:00"
+export WALLTIME_MPASSIT="0:10:00"
+export WALLTIME_UPP="0:10:00"
+export WALLTIME_JEDIVAR="00:30:00"
+#
+export KEEPDATA=YES
+export STMP_RETENTION_CYCS=24
+#export CYCLETHROTTLE=3600
+#
+# local.setup: setup some local options specific to a platform or an experiment
+#
+# set up IC, LBC sources and A/Q/P/R information
+export IC_EXTRN_MDL_NAME="RAP"
+export IC_EXTRN_MDL_FILENAME_PATTERN="@y@j@H000^HHH^"
+export LBC_EXTRN_MDL_NAME=${IC_EXTRN_MDL_NAME}
+export LBC_EXTRN_MDL_FILENAME_PATTERN=${IC_EXTRN_MDL_FILENAME_PATTERN}
+export IC_EXTRN_MDL_BASEDIR="/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run/rap_data"
+export LBC_EXTRN_MDL_BASEDIR=${IC_EXTRN_MDL_BASEDIR}
+export OBSPATH="/gpfs/f6/wrfruc/scratch/David.Dowell/retro_data/obs_rap"
+export OBSPATH_NSSLMOSIAC="/gpfs/f6/wrfruc/scratch/David.Dowell/retro_data/radar/mrms"
+#export OBSPATH_AIRNOW="/scratch4/BMC/rtrr/RRFS2_RETRO_DATA/May2024/airnow"
+
+export ACCOUNT="bil-pmp"
+#export ACCOUNT="arfs-gsl"
+export QUEUE="normal"
+export PARTITION="batch"
+export CLUSTER="c6"
+export NODES_IC="<nodes>10:ppn=160</nodes>"
+export NODES_LBC="<nodes>10:ppn=160</nodes>"
+export NODES_FCST="<nodes>10:ppn=160</nodes>"
+export NODES_MPASSIT="<nodes>1:ppn=160</nodes>"
+export NODES_UPP="<nodes>1:ppn=80</nodes>"
+export NODES_JEDIVAR="<nodes>20:ppn=40</nodes>"
+export NODES_MPAS_BLEND="<nodes>10:ppn=160</nodes>"
+
+export MORE_XML_ENTITIES=true
+export DO_CLEAN=false
+export USE_THE_LATEST_SATBIAS=false
