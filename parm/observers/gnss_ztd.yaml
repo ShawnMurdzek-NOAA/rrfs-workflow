@@ -52,7 +52,7 @@
            identifier:
              name: PolygonCheck
              logging: true
-           <<: *polygonConfig  # yamllint disable-line rule:anchors
+           <<: *polygonConfig
 
          - filter: Bounds Check
            apply at iterations: 0,1
