@@ -75,6 +75,11 @@ def fcst(xmlFile, expdir, do_ensemble=False, dcEnsGrpInfo=None, do_spinup=False,
     else:
         dcTaskEnv['DO_SPPT'] = "false"
 
+    if os.getenv('DO_DART', 'FALSE').upper() == "TRUE":
+        dcTaskEnv['DO_DART'] = "TRUE"
+    else:
+        dcTaskEnv['DO_DART'] = "FALSE"
+
     if os.getenv('DO_CHEMISTRY', 'FALSE').upper() == "TRUE":
         dcTaskEnv['EBB_DCYCLE'] = os.getenv('EBB_DCYCLE', 0)
         dcTaskEnv['CHEM_GROUPS'] = os.getenv('CHEM_GROUPS', 'smoke')

@@ -39,11 +39,11 @@ fi
 mkdir -p mpas_ics
 mkdir -p mpas_lbcs
 mkdir -p filter_out
-ln -snf "${UMBRELLA_PREP_IC_DATA}/${initial_file}" "mpas_ics/mem${ENS_INDEX}.nc"
-ln -snf "${UMBRELLA_PREP_LBC_DATA}/lbc.${timestr}.nc" "mpas_lbcs/mem${ENS_INDEX}.nc"
+${cpreq} "${UMBRELLA_PREP_IC_DATA}/${initial_file}" "mpas_ics/${initial_file}"
+${cpreq} "${UMBRELLA_PREP_LBC_DATA}/lbc.${timestr}.nc" "mpas_lbcs/lbc.${timestr}.nc"
 ln -snf "${UMBRELLA_DART_FILTER_DATA}/ens_out/mem${ENS_INDEX}.nc" "filter_out/mem${ENS_INDEX}.nc"
-echo "mpas_ics/mem${ENS_INDEX}.nc" > mpas_ics.txt
-echo "mpas_lbcs/mem${ENS_INDEX}.nc" > mpas_lbcs.txt
+echo "mpas_ics/${initial_file}" > mpas_ics.txt
+echo "mpas_lbcs/lbc.${timestr}.nc" > mpas_lbcs.txt
 echo "filter_out/mem${ENS_INDEX}.nc" > filter_out.txt
 
 # create a template netCDF file with both mpasout and invariant information
