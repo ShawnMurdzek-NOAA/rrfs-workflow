@@ -56,7 +56,7 @@
            identifier:
              name: PolygonCheck
              logging: true
-           <<: *polygonConfig  # yamllint disable-line rule:anchors
+           <<: *polygonConfig
 
          # Time window filter
          - filter: Domain Check

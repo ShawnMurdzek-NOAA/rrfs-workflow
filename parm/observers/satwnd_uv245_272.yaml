@@ -54,7 +54,7 @@
            identifier:
              name: PolygonCheck
              logging: true
-           <<: *polygonConfig  # yamllint disable-line rule:anchors
+           <<: *polygonConfig
 
          # Time window filter
          - filter: Domain Check
@@ -496,6 +496,7 @@
              name: GrossErrorCheckU
              logging: true
              diagnostic flag new: false
+           apply at iterations: 0,1
            filter variables:
            - name: windEastward
            function absolute threshold:
@@ -517,6 +518,7 @@
              name: GrossErrorCheckV
              logging: true
              diagnostic flag new: false
+           apply at iterations: 0,1
            filter variables:
            - name: windNorthward
            function absolute threshold:

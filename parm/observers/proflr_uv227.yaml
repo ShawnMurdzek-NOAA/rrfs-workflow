@@ -61,7 +61,7 @@
            identifier:
              name: PolygonCheck
              logging: true
-           <<: *polygonConfig  # yamllint disable-line rule:anchors
+           <<: *polygonConfig
 
          # Time window filter
          - filter: Domain Check
@@ -309,6 +309,7 @@
              name: ObsValueBoundsCheck
              logging: true
              diagnostic flag new: false
+           apply at iterations: 0,1
            filter variables:
            - name: windEastward
            - name: windNorthward
