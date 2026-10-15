@@ -19,22 +19,38 @@ echo "forecast length for this cycle is ${fcst_len_hrs_thiscyc}"
 #
 # determine whether to begin new cycles
 #
+timestr=$(date -d "${CDATE:0:8} ${CDATE:8:2}" +%Y-%m-%d_%H.%M.%S)
 if [[ -r "${UMBRELLA_PREP_IC_DATA}/init.nc" ]]; then
   ln -snf "${UMBRELLA_PREP_IC_DATA}/init.nc" init.nc
   START_TYPE='cold'
   do_DAcycling='false'
 else
-  timestr=$(date -d "${CDATE:0:8} ${CDATE:8:2}" +%Y-%m-%d_%H.%M.%S)
   ln -snf "${UMBRELLA_PREP_IC_DATA}/mpasout.nc" "${UMBRELLA_FCST_DATA}/mpasout.${timestr}.nc"
   START_TYPE='warm'
   do_DAcycling='true'
 fi
 
 #
-#  link bdy and fix files
+#  link bdy files
 #
 ln -snf "${UMBRELLA_PREP_LBC_DATA}"/lbc*.nc .
 
+# Use IC and LBC files from DART if they exist
+if [[ "${DO_DART:-FALSE}" == "TRUE" ]];  then
+  if [[ -r "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/init.nc" ]]; then
+    ln -snf "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/init.nc" init.nc
+    echo "Using init.nc file from DART update task"
+  elif [[ -r "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/mpasout.${timestr}.nc" ]]; then
+    ln -snf "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/mpasout.nc" "${UMBRELLA_FCST_DATA}/mpasout.${timestr}.nc"
+    echo "Using mpasout.nc file from DART update task"
+  fi
+  if [[ -r "${UMBRELLA_DART_UPDATE_DATA}/mpas_lbcs/lbc.${timestr}.nc" ]]; then
+    ln -snf "${UMBRELLA_DART_UPDATE_DATA}/mpas_lbcs/lbc.${timestr}.nc" "${UMBRELLA_FCST_DATA}/lbc.${timestr}.nc"
+    echo "Using lbc.nc file from DART update task"
+  fi
+fi
+
+# Link fix files
 ln -snf "${FIXrrfs}/physics/${PHYSICS_SUITE}"/* .
 ln -snf "${FIXrrfs}/${MESH_NAME}/${MESH_NAME}.ugwp_oro_data.nc" ./ugwp_oro_data.nc
 zeta_levels=${EXPDIR}/config/ZETA_LEVELS.txt

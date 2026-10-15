@@ -25,21 +25,16 @@ else
 fi
 
 if [[ "${DO_DART:-FALSE}" == "TRUE" ]];  then
-  export UMBRELLA_PREP_LBC_DATA=${UMBRELLA_PREP_LBC_DATA:-${DATAROOT}/${RUN}_dart_update_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}/mpas_lbcs}
-else
-  export UMBRELLA_PREP_LBC_DATA=${UMBRELLA_PREP_LBC_DATA:-${DATAROOT}/${RUN}_prep_lbc_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
+  export UMBRELLA_DART_UPDATE_DATA=${UMBRELLA_DART_UPDATE_DATA:-${DATAROOT}/${RUN}_dart_update_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
 fi
 
+export UMBRELLA_PREP_LBC_DATA=${UMBRELLA_PREP_LBC_DATA:-${DATAROOT}/${RUN}_prep_lbc_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
 export jobid=${jobid:-fcst_${cyc}}
 if [[ "${DO_SPINUP:-FALSE}" == "TRUE" ]];  then
   export UMBRELLA_PREP_IC_DATA=${UMBRELLA_PREP_IC_DATA:-${DATAROOT}/${RUN}_prep_ic_spinup_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
   export UMBRELLA_FCST_DATA=${UMBRELLA_FCST_DATA:-${DATAROOT}/${RUN}_fcst_spinup_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
 else
-  if [[ "${DO_DART:-FALSE}" == "TRUE" ]];  then
-    export UMBRELLA_PREP_IC_DATA=${UMBRELLA_PREP_IC_DATA:-${DATAROOT}/${RUN}_dart_update_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}/mpas_ics}
-  else
-    export UMBRELLA_PREP_IC_DATA=${UMBRELLA_PREP_IC_DATA:-${DATAROOT}/${RUN}_prep_ic_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
-  fi
+  export UMBRELLA_PREP_IC_DATA=${UMBRELLA_PREP_IC_DATA:-${DATAROOT}/${RUN}_prep_ic_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
   export UMBRELLA_FCST_DATA=${UMBRELLA_FCST_DATA:-${DATAROOT}/${RUN}_fcst_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
 fi
 export UMBRELLA_PREP_CHEM_DATA=${UMBRELLA_PREP_CHEM_DATA:-${DATAROOT}/${RUN}_prep_chem_${cyc}_${rrfs_ver}/${WGF}${MEMDIR}}
