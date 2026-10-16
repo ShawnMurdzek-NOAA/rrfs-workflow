@@ -36,14 +36,14 @@ fi
 
 # link ensembles member and define input/output files
 
-mkdir -p mpas_ics
-mkdir -p mpas_lbcs
+mkdir -p "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics"
+mkdir -p "${UMBRELLA_DART_UPDATE_DATA}/mpas_lbcs"
 mkdir -p filter_out
-${cpreq} "${UMBRELLA_PREP_IC_DATA}/${initial_file}" "mpas_ics/${initial_file}"
-${cpreq} "${UMBRELLA_PREP_LBC_DATA}/lbc.${timestr}.nc" "mpas_lbcs/lbc.${timestr}.nc"
+${cpreq} "${UMBRELLA_PREP_IC_DATA}/${initial_file}" "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/${initial_file}"
+${cpreq} "${UMBRELLA_PREP_LBC_DATA}/lbc.${timestr}.nc" "${UMBRELLA_DART_UPDATE_DATA}/mpas_lbcs/lbc.${timestr}.nc"
 ln -snf "${UMBRELLA_DART_FILTER_DATA}/ens_out/mem${ENS_INDEX}.nc" "filter_out/mem${ENS_INDEX}.nc"
-echo "mpas_ics/${initial_file}" > mpas_ics.txt
-echo "mpas_lbcs/lbc.${timestr}.nc" > mpas_lbcs.txt
+echo "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/${initial_file}" > mpas_ics.txt
+echo "${UMBRELLA_DART_UPDATE_DATA}/mpas_lbcs/lbc.${timestr}.nc" > mpas_lbcs.txt
 echo "filter_out/mem${ENS_INDEX}.nc" > filter_out.txt
 
 # create a template netCDF file with both mpasout and invariant information

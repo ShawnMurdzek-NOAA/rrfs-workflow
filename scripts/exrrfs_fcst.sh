@@ -40,12 +40,12 @@ if [[ "${DO_DART:-FALSE}" == "TRUE" ]];  then
   if [[ -r "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/init.nc" ]]; then
     ln -snf "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/init.nc" init.nc
     echo "Using init.nc file from DART update task"
-  elif [[ -r "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/mpasout.${timestr}.nc" ]]; then
+  elif [[ -r "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/mpasout.nc" ]]; then
     ln -snf "${UMBRELLA_DART_UPDATE_DATA}/mpas_ics/mpasout.nc" "${UMBRELLA_FCST_DATA}/mpasout.${timestr}.nc"
     echo "Using mpasout.nc file from DART update task"
   fi
   if [[ -r "${UMBRELLA_DART_UPDATE_DATA}/mpas_lbcs/lbc.${timestr}.nc" ]]; then
-    ln -snf "${UMBRELLA_DART_UPDATE_DATA}/mpas_lbcs/lbc.${timestr}.nc" "${UMBRELLA_FCST_DATA}/lbc.${timestr}.nc"
+    ln -snf "${UMBRELLA_DART_UPDATE_DATA}/mpas_lbcs/lbc.${timestr}.nc" .
     echo "Using lbc.nc file from DART update task"
   fi
 fi
