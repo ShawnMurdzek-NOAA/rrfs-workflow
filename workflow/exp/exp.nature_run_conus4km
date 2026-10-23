@@ -3,17 +3,17 @@
 #
 # shellcheck disable=all
 export NET=rrfs                    # rrfs, rtma, 
-export MESH_NAME=conus3km         # conus12km, conus3km, na12km, etc
+export MESH_NAME=conus4km         # conus12km, conus3km, na12km, etc
 export WGF="det"   # working group function = "det", "enkf", "ens", "firewx"
-export EXP_NAME=NR_2024050600_2024050900_RAP_sfc
+export EXP_NAME=NR_2024050600_2024050900
 export VERSION=$(cat ./VERSION)
-export TAG=d3km
-export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run/${EXP_NAME}
+export TAG=d4km
+export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run_4km/${EXP_NAME}
 export EXPDIR=${OPSROOT}/exp/${NET}${WGF}
 export COMROOT=${OPSROOT}/com      # task input and output data as well as logs
 export DATAROOT=${OPSROOT}/stmp    # task workdirs ($DATA) which to be removed immediately upon task completion unless KEEPDATA=YES
 #
-export SFC_UPDATE_SOURCE_DIR=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run/MPAS_RAP
+export SFC_UPDATE_SOURCE_DIR=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run_4km/MPAS_RAP
 #
 export ZETA_LEVELS="L60.txt"
 #
