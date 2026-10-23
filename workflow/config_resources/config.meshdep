@@ -57,6 +57,25 @@ elif [[ ${MESH_NAME} == "conus12km" ]]; then
   export NONVAR_USERDX=12000
   export NONVAR_SEARCH_RAD=4
 
+elif [[ ${MESH_NAME} == "conus4km" ]]; then
+  export FCST_DT=20
+  export FCST_SUBSTEPS=4
+  export FCST_RADT=15
+  export UPP_DOMAIN="conus."
+  export MRMS_GRIDSPACINGDEG=0.03
+
+  export MPASSIT_NX=1800
+  export MPASSIT_NY=1060
+  export MPASSIT_DX=3000.0
+  export MPASSIT_REF_LAT=38.5
+  export MPASSIT_REF_LON=-97.5
+
+  export NONVAR_LARC_NPTS=3
+  export NONVAR_METAR_IMPACT=20
+  export NONVAR_PROJ_NAME="CONUS"
+  export NONVAR_USERDX=4000
+  export NONVAR_SEARCH_RAD=1
+
 elif [[ ${MESH_NAME} == "conus3p5km" ]]; then
   export FCST_DT=20
   export FCST_SUBSTEPS=4
