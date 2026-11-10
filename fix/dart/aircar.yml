@@ -4,6 +4,8 @@ ioda to obsq converter:
       type: AIRCRAFT_TEMPERATURE
     - name: specificHumidity
       type: AIRCRAFT_SPECIFIC_HUMIDITY
+    - name: dewpointTemperature
+      type: AIRCRAFT_DEWPOINT
     - name: windEastward
       type: AIRCRAFT_U_WIND_COMPONENT
     - name: windNorthward

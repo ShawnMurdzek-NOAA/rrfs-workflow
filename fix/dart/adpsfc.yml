@@ -1,0 +1,16 @@
+ioda to obsq converter:
+  observation variables:
+    - name: airTemperatureAt2M
+      type: METAR_TEMPERATURE_2_METER
+    - name: dewpointTemperatureAt2M
+      type: METAR_DEWPOINT_2_METER
+    - name: windEastward
+      type: METAR_U_10_METER_WIND
+    - name: windNorthward
+      type: METAR_V_10_METER_WIND
+
+  observation category:
+    name: conventional
+    vertical coordinate:
+      name: MetaData/stationElevation
+      units: "height (m)"
