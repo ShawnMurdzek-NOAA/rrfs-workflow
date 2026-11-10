@@ -83,9 +83,10 @@ if [[ ${n_files} == 0 ]]; then
 elif [[ ${n_files} == 1 ]]; then
   cp ${obs_seq_names[@]} obs_seq.out
 else
-  echo "ERROR: Cannot handle multiple DART obs_seq files yet"
-  echo "Choose a single observation type in all_obs and try again"
-  exit 1
+  printf "%s\n" "${obs_seq_names[@]}" > obs_seq_list.txt
+  ${HOMErrfs}/workflow/tools/concatenate_dart_obs_seq.py \
+            obs_seq_list.txt \
+            --out_fname obs_seq.out
 fi
 
 # Save final obs_seq file
