@@ -53,7 +53,7 @@ for ob in ${all_obs[@]}; do
             --out_fname ${ioda_filter}
 
     # Add obs errors to IODA file
-    ${HOMErrfs}/workflow/tools/modify_ioda_obs_err_for_dart.py \
+    ${HOMErrfs}/workflow/tools/modify_ioda_for_dart.py \
             ${ioda_filter} \
             errtable.rrfs \
             --out_fname ${ioda_err}

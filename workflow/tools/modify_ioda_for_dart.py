@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-Modify IODA obs errors so they can be used in DART
+Modify IODA netCDF files so they can be used in DART
 
 Obs errors come from a GSI-style errtable.rrfs file
 
-shawn.s.murdzek@noaa.gov
+Shawn Murdzek with assistance from Google Gemini Pro 3.1
 """
 
 # ---------------------------------------------------------------------------------------------------
@@ -19,6 +19,7 @@ import xarray as xr
 import pandas as pd
 import metpy.calc as mc
 from metpy.units import units
+import copy
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -64,6 +65,14 @@ def parse_in_args(argv):
                         default=0,
                         help='Option to print extra output (0 = off, 1 = on)',
                         type=int)
+
+    parser.add_argument('--moisture_var', 
+                        dest='moisture_var', 
+                        default='specificHumidity',
+                        choices=['specificHumidity', 'relativeHumidity', 'dewpointTemperature'],
+                        help='Moisture variable to output (specificHumidity, relativeHumidity, or \
+                              dewpointTemperature)', 
+                        type=str)
 
     return parser.parse_args(argv)
 
@@ -149,23 +158,78 @@ def compute_qs(T, p):
     return qs
 
 
-def modify_ioda(ioda, err_dict):
+def dewpt_error_from_rh_and_temp(tmpk, rh_in, t_error, rh_error):
     """
-    Modify an IODA xarray DataSet so that it includes obs errors
+    Computes estimated uncertainty in a dewpoint observation based on temperature 
+    and relative humidity observations (using finite differencing).
+
+    Source: DART/observations/obs_converters/obs_error/dewpoint_obs_err_mod.f90
+    Based on Lin and Hubbard (2004, JAMC)
+
+    Parameters
+    ----------
+    tmpk : float or array
+        Temperature (K)
+    rh_in : float or array
+        Relative humidity (decimal)
+    rh_error : float or array
+        Relative humidity error (decimal)
+    t_error : float or array, optional
+        Temperature error (K)
+
+    Returns
+    -------
+    dewpt_error : float or array
+        Dewpoint temperature error (K)
+
+    """
+
+    rh_min = 0.20
+    rh_max = 1.00
+    delta_rh = 0.01
+    delta_t = 0.1
+
+    # Set min RH to 20% b/c dewpoint uncertainty becomes unbounded as RH approaches 0
+    rh = np.maximum(rh_in, rh_min)
+
+    # Finite-difference approximations
+    rh1 = np.maximum(rh - delta_rh, rh_min)
+    rh2 = np.minimum(rh + delta_rh, rh_max)
+    t1 = tmpk - delta_t
+    t2 = tmpk + delta_t
+
+    # MetPy expects dimensionless RH (0 to 1) and Temp in Kelvin
+    td2_rh = mc.dewpoint_from_relative_humidity(tmpk * units.K, rh2).to('kelvin').magnitude
+    td1_rh = mc.dewpoint_from_relative_humidity(tmpk * units.K, rh1).to('kelvin').magnitude
+    td_deriv_rh = (td2_rh - td1_rh) / (rh2 - rh1)
+
+    td2_t = mc.dewpoint_from_relative_humidity(t2 * units.K, rh).to('kelvin').magnitude
+    td1_t = mc.dewpoint_from_relative_humidity(t1 * units.K, rh).to('kelvin').magnitude
+    td_deriv_t = (td2_t - td1_t) / (t2 - t1)
+
+    dewpt_error = np.sqrt((td_deriv_t**2 * t_error**2) + (td_deriv_rh**2 * rh_error**2))
+    
+    return dewpt_error
+
+
+def modify_ioda(ioda, err_dict, moisture_var):
+    """
+    Modify an IODA xarray DataSet so that it includes obs errors and converts moisture
     """
 
     # Mapping between IODA variables and errtable columns
     ioda2err = {'airTemperature': 'Terr',
                 'virtualTemperature': 'Terr',
+                'airTemperatureAt2M': 'Terr',
                 'sensibleTemperature': 'Terr',
                 'specificHumidity': 'RHerr',
+                'specificHumidityAt2M': 'RHerr',
                 'stationPressure': 'PSerr',
                 'windEastward': 'UVerr',
                 'windNorthward': 'UVerr'}
 
-    ioda_vars = list(ioda['ObsValue'].data_vars)
-    for v in ioda_vars:
-
+    vars_to_process = list(ioda['ObsValue'].data_vars)
+    for v in vars_to_process:
         if v not in ioda2err:
             print(f"WARNING: IODA variable {v} not supported. Skipping")
             continue
@@ -178,15 +242,50 @@ def modify_ioda(ioda, err_dict):
             all_prs = ioda['MetaData']['pressure'].values[cond]
 
             # Interpolate obs errors based on pressure
+            # Note: Pressure values MUST be increasing for np.interp
             ioda['ObsError'][v].values[cond] = np.interp(all_prs,
-                                                         obs_errors[t]['prs'],
-                                                         obs_errors[t][ioda2err[v]])
+                                                         err_dict[t]['prs'][::-1],
+                                                         err_dict[t][ioda2err[v]][::-1])
 
-        # Put specificHumidity obs errors in proper units
-        if v == 'specificHumidity':
-            qs = compute_qs(ioda['ObsValue']['airTemperature'].values,
+        # Moisture variable unit/error conversions
+        # Assume that we are given specificHumidity by IODA file (reasonable assumption if derived 
+        # from prepBUFR)
+        if v in ['specificHumidity', 'specificHumidityAt2M']:
+
+            # Determine corresponding temperature field and moisture field
+            if v == 'specificHumidity':
+                T_field = 'airTemperature'
+                mois_field = f"{moisture_var}"
+            elif v == 'specificHumidityAt2M':
+                T_field = 'airTemperatureAt2M'
+                mois_field = f"{moisture_var}At2M"
+
+            # Copy over specific humidity to new moisture variable
+            if moisture_var != 'specificHumidity':
+                for group in ['ObsError', 'ObsType', 'ObsValue', 'QualityMarker']:
+                    ioda[group][mois_field] = copy.deepcopy(ioda['ObsValue'][v])
+
+            # Compute errors for qv
+            qs = compute_qs(ioda['ObsValue'][T_field].values,
                             ioda['MetaData']['pressure'].values)
             ioda['ObsError'][v].values = ioda['ObsError'][v].values * qs
+
+            # Convert to proper units
+            # At this point for mois_field, ObsError is for RH and ObsValue is for qv
+            if moisture_var == 'relativeHumidity':
+                ioda['ObsValue'][mois_field].values = ioda['ObsValue'][mois_field].values / qs
+                for group in ['ObsValue', 'ObsError']:
+                    ioda[group][mois_field].attrs = {'long_name' : 'Relative Humidity', 'units': 'decimal'}
+
+            elif moisture_var == 'dewpointTemperature':
+                rh = ioda['ObsValue'][mois_field].values / qs
+                T = ioda['ObsValue'][T_field].values
+                rh_error = ioda['ObsError'][mois_field].values
+                T_error = ioda['ObsError'][T_field]
+                ioda['ObsValue'][mois_field].values = mc.dewpoint_from_relative_humidity(T * units.K, rh).to('kelvin').magnitude
+                ioda['ObsError'][mois_field].values = dewpt_error_from_rh_and_temp(T, rh, T_error, rh_error)
+                for group in ['ObsValue', 'ObsError']:
+                    ioda[group][mois_field].attrs = {'long_name' : 'Dewpoint Temperature', 'units': 'K'}
 
     return ioda
 
@@ -208,7 +307,7 @@ if __name__ == '__main__':
     # Modify IODA file
     if param.verbose == 1:
         print('Modifying IODA files...')
-    ioda_tree = modify_ioda(ioda_tree, obs_errors)
+    ioda_tree = modify_ioda(ioda_tree, obs_errors, param.moisture_var)
 
     # Write modified IODA file
     if param.verbose == 1:
@@ -220,5 +319,5 @@ if __name__ == '__main__':
 
 
 """
-End modify_ioda_obs_err_for_dart.py
+End modify_ioda_for_dart.py
 """
