@@ -190,6 +190,9 @@ case ${task_id} in
       "${HOMErrfs}/workflow/sideload/pyDAmonitor/ush/drive.sh"
     fi
     ;;
+  dart_perfect_model_obs)
+    "${HOMErrfs}/workflow/sideload/dart_perfect_model_obs.sh"
+    ;;
   dart_diags)
     module purge
     set +x

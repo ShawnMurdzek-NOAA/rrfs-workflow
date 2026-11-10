@@ -38,6 +38,7 @@ from rocoto_funcs.hofx import hofx
 from rocoto_funcs.pyDAmonitor import pyDAmonitor
 from rocoto_funcs.archive import archive
 from rocoto_funcs.dart_obs_proc import dart_obs_proc
+from rocoto_funcs.dart_perfect_model_obs import dart_perfect_model_obs
 from rocoto_funcs.dart_filter import dart_filter
 from rocoto_funcs.dart_update import dart_update
 from rocoto_funcs.dart_diags import dart_diags
@@ -97,6 +98,12 @@ def setup_xml(HOMErrfs, expdir):
             if os.getenv("DO_NONVAR_CLOUD_ANA", "FALSE").upper() == "TRUE":
                 nonvar_bufrobs(xmlFile, expdir)
                 nonvar_reflobs(xmlFile, expdir)
+            #
+            if os.getenv("DO_DART_PERFECT_MODEL_OBS", "FALSE").upper() == "TRUE":
+                dart_obs_proc(xmlFile, expdir)
+                dart_perfect_model_obs(xmlFile, expdir)
+                if not os.path.isfile(f"{HOMErrfs}/exec/filter"):
+                    print("  *** DO_DART=true but DART not cloned and compiled yet!!! ***\n  run `tools/clone_build_dart.sh` first\n")
             #
             if os.getenv("DO_IC_LBC", "TRUE").upper() == "TRUE":
                 ungrib_ic(xmlFile, expdir)
