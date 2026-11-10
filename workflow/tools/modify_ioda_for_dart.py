@@ -293,7 +293,7 @@ def modify_ioda(ioda, err_dict, moisture_var):
 if __name__ == '__main__':
 
     start = dt.datetime.now()
-    pgm_name = 'modify_ioda_obs_err_for_dart.py'
+    pgm_name = 'modify_ioda_for_dart.py'
     print(f"\nStarting {pgm_name}")
     print(f"Time = {start.strftime('%Y%m%d %H:%M:%S')}\n")
 
