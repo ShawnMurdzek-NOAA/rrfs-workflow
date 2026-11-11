@@ -263,7 +263,7 @@ def modify_ioda(ioda, err_dict, moisture_var):
             # Copy over specific humidity to new moisture variable
             if moisture_var != 'specificHumidity':
                 for group in ['ObsError', 'ObsType', 'ObsValue', 'QualityMarker']:
-                    ioda[group][mois_field] = copy.deepcopy(ioda['ObsValue'][v])
+                    ioda[group][mois_field] = copy.deepcopy(ioda[group][v])
 
             # Compute errors for qv
             qs = compute_qs(ioda['ObsValue'][T_field].values,
@@ -284,8 +284,8 @@ def modify_ioda(ioda, err_dict, moisture_var):
                 T_error = ioda['ObsError'][T_field]
                 ioda['ObsValue'][mois_field].values = mc.dewpoint_from_relative_humidity(T * units.K, rh).to('kelvin').magnitude
                 ioda['ObsError'][mois_field].values = dewpt_error_from_rh_and_temp(T, rh, T_error, rh_error)
-                for group in ['ObsValue', 'ObsError']:
-                    ioda[group][mois_field].attrs = {'long_name' : 'Dewpoint Temperature', 'units': 'K'}
+                ioda['ObsValue'][mois_field].attrs = {'long_name' : 'Dewpoint Temperature', 'units': 'K'}
+                ioda['ObsError'][mois_field].attrs = {'long_name' : 'Dewpoint Temperature error', 'units': 'K'}
 
     return ioda
 

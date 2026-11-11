@@ -9,6 +9,7 @@ Shawn Murdzek
 # Import Modules
 # ---------------------------------------------------------------------------------------------------
 
+import datetime as dt
 import sys
 import argparse
 import pydartdiags.obs_sequence.obs_sequence as obsq
@@ -56,7 +57,7 @@ def read_obs_seq_files(in_fname):
     """
 
     obs_seq_list = []
-    with read(in_fname, 'r') as fptr:
+    with open(in_fname, 'r') as fptr:
         for l in fptr:
             obs_seq_list.append(obsq.ObsSequence(l.strip()))
 
