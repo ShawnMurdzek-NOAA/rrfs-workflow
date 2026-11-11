@@ -2,8 +2,6 @@ ioda to obsq converter:
   observation variables:
     - name: airTemperature
       type: AIRCRAFT_TEMPERATURE
-    - name: specificHumidity
-      type: AIRCRAFT_SPECIFIC_HUMIDITY
     - name: dewpointTemperature
       type: AIRCRAFT_DEWPOINT
     - name: windEastward

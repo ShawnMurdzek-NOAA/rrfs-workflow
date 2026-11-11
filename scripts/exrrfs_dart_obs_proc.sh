@@ -14,8 +14,8 @@ cd "${DATA}" || exit 1
 #-----------------------------------------------------------------------
 #
 
-# Only support AIRCAR for now, may add other obs later
-all_obs=( "aircar" )
+# Only support AIRCAR and ADPSFC for now, may add other obs later
+all_obs=( "aircar" "adpsfc" )
 
 #
 #-----------------------------------------------------------------------
@@ -56,7 +56,8 @@ for ob in ${all_obs[@]}; do
     ${HOMErrfs}/workflow/tools/modify_ioda_for_dart.py \
             ${ioda_filter} \
             errtable.rrfs \
-            --out_fname ${ioda_err}
+            --out_fname ${ioda_err} \
+	    --moisture_var "dewpointTemperature"
 
     # Convert to obs_seq file
     python -m pyjedi.ioda2obsq ${pyjedi_yaml} ${ioda_err} ${obs_seq_out}
