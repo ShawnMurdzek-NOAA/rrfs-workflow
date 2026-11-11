@@ -4,6 +4,7 @@ declare -rx PS4='+${SECONDS}s $(basename ${BASH_SOURCE[0]:-${FUNCNAME[0]:-"Unkno
 set -x
 date
 #
+cpreq=${cpreq:-cpreq}
 export HOMErrfs=${HOMErrfs} #comes from the workflow at runtime
 export FIXrrfs=${FIXrrfs:-${HOMErrfs}/fix}
 #
@@ -14,7 +15,7 @@ mkdir -p ${workdir}
 cd ${workdir}
 
 # Link DART obs_seq.out
-ln -snf "${COMOUT}/dart_obs_proc/${WGF}/obs_seq.out" .
+ln -snf "${COMOUT}/dart_obs_proc/${WGF}/obs_seq.out" "obs_seq.in"
 
 # Link required MPAS files
 hist_time=$( date -d "${CDATE::8} ${CDATE:8:2}" "+%Y-%m-%d_%H.%M.%S" )
