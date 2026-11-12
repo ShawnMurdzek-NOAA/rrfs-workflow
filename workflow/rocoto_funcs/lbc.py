@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import math
 from rocoto_funcs.base import xml_task, get_cascade_env
 
 # begin of lbc --------------------------------------------------------
@@ -20,7 +21,6 @@ def lbc(xmlFile, expdir, do_ensemble=False):
     dcTaskEnv = {
         'EXTRN_MDL_SOURCE': f'{extern_mdl_source}',
         'PHYSICS_SUITE': f'{physics_suite}',
-        'OFFSET': f'{offset}',
         'LENGTH': f'{length}',
         'INTERVAL': f'{interval}',
         'GROUP_INDEX': f'#group_index#',
@@ -34,6 +34,7 @@ def lbc(xmlFile, expdir, do_ensemble=False):
         dcTaskEnv['CHEM_GROUPS'] = os.getenv('CHEM_GROUPS', 'smoke')
 
     if not do_ensemble:
+        dcTaskEnv['OFFSET'] = f'{offset}'
         # metatask (nested or not)
         meta_bgn = f'''
 <metatask name="{meta_id}">
@@ -44,12 +45,25 @@ def lbc(xmlFile, expdir, do_ensemble=False):
         ensindexstr = ""
     #
     else:  # ensemble
+        dcTaskEnv['OFFSET'] = '#offset#'
         # metatask (nested or not)
         ens_size = int(os.getenv('ENS_SIZE', '2'))
         ens_indices = ''.join(f'{i:03d} ' for i in range(1, int(ens_size) + 1)).strip()
+        mem_offsets = (f'{offset} ' * ens_size).strip()
+
+        # Use multiple offsets if using GEFS and ensemble size exceeds GEFS ensemble size
+        if (ens_size > 30) and ((extern_mdl_source == "GEFS_NCO") or extern_mdl_source == 'GEFS'):
+            n_unique_offsets = math.ceil(ens_size / 30)
+            offsets_single = [int(offset) + 12*i for i in range(n_unique_offsets)]
+            n_repeats = math.ceil(ens_size / n_unique_offsets)
+            offsets_all = (offsets_single * n_repeats)[:ens_size]
+            offsets_all.sort()
+            mem_offsets = ''.join(f'{i} ' for i in offsets_all).strip()
+
         meta_bgn = f'''
 <metatask name="{meta_id}">
 <var name="ens_index">{ens_indices}</var>
+<var name="offset">{mem_offsets}</var>
 <metatask name="{meta_id}_m#ens_index#">
 <var name="group_index">{group_indices}</var>'''
         meta_end = f'\
