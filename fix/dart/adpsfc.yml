@@ -13,4 +13,4 @@ ioda to obsq converter:
     name: conventional
     vertical coordinate:
       name: MetaData/stationElevation
-      units: "height (m)"
+      units: "surface (m)"

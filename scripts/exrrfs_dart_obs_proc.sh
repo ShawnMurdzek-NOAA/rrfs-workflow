@@ -41,7 +41,7 @@ for ob in ${all_obs[@]}; do
     # File names
     ioda_filter="${ob}_time_filtered.nc"
     ioda_err="${ob}_with_err.nc"
-    obs_seq_out="${ob}_ob_seq.out"
+    obs_seq_out="${ob}_obs_seq.out"
     pyjedi_yaml="${ob}.yml"
     ln -snf "${FIXrrfs}/dart/${pyjedi_yaml}" .
 
@@ -76,7 +76,7 @@ done
 #-----------------------------------------------------------------------
 #
 
-obs_seq_names=( *ob_seq.out )
+obs_seq_names=( *_obs_seq.out )
 n_files=${#obs_seq_names[@]}
 if [[ ${n_files} == 0 ]]; then
   echo "ERROR: No DART obs_seq files created"
