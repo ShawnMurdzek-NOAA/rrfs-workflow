@@ -56,13 +56,21 @@ def ungrib_lbc(xmlFile, expdir, do_ensemble=False):
         offset_str = '#offset#'
 
         # Use multiple offsets if using GEFS and ensemble size exceeds GEFS ensemble size
-        if (ens_size > 30) and ((extrn_mdl_source == "GEFS_NCO") or extrn_mdl_source == 'GEFS'):
-            n_unique_offsets = math.ceil(ens_size / 30)
+        gefs_size = 30
+        if (ens_size > gefs_size) and ((extrn_mdl_source == "GEFS_NCO") or extrn_mdl_source == 'GEFS'):
+            n_unique_offsets = math.ceil(ens_size / gefs_size)
             offsets_single = [int(offset) + 12*i for i in range(n_unique_offsets)]
             n_repeats = math.ceil(ens_size / n_unique_offsets)
             offsets_all = (offsets_single * n_repeats)[:ens_size]
             offsets_all.sort()
             mem_offsets = ''.join(f'{i} ' for i in offsets_all).strip()
+            gmems_ls = [1]
+            for i in range(1, ens_size):
+                if offsets_all[i] == offsets_all[i-1]:
+                    gmems_ls.append(gmems_ls[-1] + 1)
+                else:
+                    gmems_ls.append(1)
+            gmems = ''.join(f'{i:02d} ' for i in gmems_ls).strip()
 
         offset='#offset#'
 
