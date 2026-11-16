@@ -55,7 +55,7 @@
    num_groups               = 1
    distributed_state        = .true.
    compute_posterior        = .true.
-   output_forward_op_errors = .true.
+   output_forward_op_errors = .false.
    output_timestamps        = .false.
    trace_execution          = .false.
    silence                  = .false.
@@ -185,7 +185,7 @@
    highest_obs_pressure_mb      = 10.0
    sfc_elev_max_diff            = 100.
    log_p_vert_interp            = .true.
-   debug                        = 1
+   debug                        = 0
    use_u_for_wind               = .false.
    use_rbf_option               = 2
    update_u_from_reconstruct    = .true.
