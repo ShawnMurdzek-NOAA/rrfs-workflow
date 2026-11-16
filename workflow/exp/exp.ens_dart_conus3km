@@ -17,7 +17,7 @@ export DO_ENSEMBLE=true
 export DO_ENSMEAN_POST=true
 export IC_ONLY=false #true  # interpolate GEFS/GDAS to the target mesh to provide ensemble BEC
 export DO_DETERMINISTIC=false
-export ENS_SIZE=30
+export ENS_SIZE=50
 export ZETA_LEVELS="L60.txt"
 #export ENS_METADEP_FRAC_THRESHOLD=0.5
 #
@@ -171,6 +171,8 @@ case ${MACHINE} in
     export NODES_UPP="<nodes>1:ppn=80</nodes>"
     export NODES_RECENTER="<nodes>1:ppn=32</nodes>"
     export NODES_GETKF="<nodes>20:ppn=40</nodes>"
+    export NODES_PREP_IC="<nodes>1:ppn=${ENS_SIZE}</nodes>"
+    export NODES_SAVE_FOR_NEXT="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     ;;
   "wcoss2")
     export IC_EXTRN_MDL_BASEDIR="/lfs/h2/emc/lam/noscrub/RRFS2_RETRO_DATA/May2024/GEFS"
