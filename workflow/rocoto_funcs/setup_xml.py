@@ -2,6 +2,7 @@
 #
 import os
 import stat
+import re
 from rocoto_funcs.base import header_begin, header_entities, header_end, \
     wflow_begin, wflow_log, wflow_cycledefs, wflow_end
 from rocoto_funcs.smart_cycledefs import smart_cycledefs
@@ -185,6 +186,18 @@ def setup_xml(HOMErrfs, expdir):
             ic(xmlFile, expdir, do_ensemble=True)
             if "global" not in MESH_NAME:
                 lbc(xmlFile, expdir, do_ensemble=True)
+
+            # Check that number of processors for prep_ic is greater than or equal to ensemble size
+            prep_ic_nodes_str = os.getenv("NODES_PREP_IC", "")
+            if len(prep_ic_nodes_str) > 0:
+                ens_size = int(os.getenv("ENS_SIZE", '1'))
+                prep_ic_nodes = int(re.search(r"<nodes>(\d+)", prep_ic_nodes_str).group(1))
+                prep_ic_ppn = int(re.search(r"ppn=(\d+)", prep_ic_nodes_str).group(1))
+                prep_ic_proc = prep_ic_nodes * prep_ic_ppn
+                if prep_ic_proc < ens_size:
+                    print('\n  *** WARNING: Number of prep_ic processors is < ensemble size!! ***')
+                    print('  This may result in prep_ic not operating on all ensemble members!!\n')
+
             prep_ic(xmlFile, expdir, do_ensemble=True)
             if "global" not in MESH_NAME:
                 prep_lbc(xmlFile, expdir, do_ensemble=True)
@@ -211,6 +224,18 @@ def setup_xml(HOMErrfs, expdir):
             for dcEnsGrpInfo in listEnsGrpInfo["group_list"]:
                 fcst(xmlFile, expdir, do_ensemble=True, dcEnsGrpInfo=dcEnsGrpInfo)
             if os.getenv('DO_CYC', 'FALSE').upper() == "TRUE":
+            
+                # Check that number of processors for save_for_next is greater than or equal to ensemble size
+                save_for_next_nodes_str = os.getenv("NODES_SAVE_FOR_NEXT", "")
+                if len(save_for_next_nodes_str) > 0:
+                    ens_size = int(os.getenv("ENS_SIZE", '1'))
+                    save_for_next_nodes = int(re.search(r"<nodes>(\d+)", save_for_next_nodes_str).group(1))
+                    save_for_next_ppn = int(re.search(r"ppn=(\d+)", save_for_next_nodes_str).group(1))
+                    save_for_next_proc = save_for_next_nodes * save_for_next_ppn
+                    if save_for_next_proc < ens_size:
+                        print('\n  *** WARNING: Number of save_for_next processors is < ensemble size!! ***')
+                        print('  This may result in save_for_next not operating on all ensemble members!!\n')
+
                 for dcGrpInfo in listSave4NextGrpInfo:
                     save_for_next(xmlFile, expdir, dcGrpInfo, do_ensemble=True)
             if os.getenv("DO_POST", "TRUE").upper() == "TRUE":
