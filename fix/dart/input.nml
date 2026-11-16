@@ -55,7 +55,7 @@
    num_groups               = 1
    distributed_state        = .true.
    compute_posterior        = .true.
-   output_forward_op_errors = .false.
+   output_forward_op_errors = .true.
    output_timestamps        = .false.
    trace_execution          = .false.
    silence                  = .false.
@@ -185,7 +185,7 @@
    highest_obs_pressure_mb      = 10.0
    sfc_elev_max_diff            = 100.
    log_p_vert_interp            = .true.
-   debug                        = 0
+   debug                        = 1
    use_u_for_wind               = .false.
    use_rbf_option               = 2
    update_u_from_reconstruct    = .true.
@@ -217,7 +217,12 @@
                           'uReconstructMeridional','QTY_V_WIND_COMPONENT',
                           'qv',                    'QTY_VAPOR_MIXING_RATIO',
                           'surface_pressure',      'QTY_SURFACE_PRESSURE',
+                          't2m',                   'QTY_2M_TEMPERATURE',
+                          'u10',                   'QTY_10M_U_WIND_COMPONENT',
+                          'v10',                   'QTY_10M_V_WIND_COMPONENT',
+                          'q2',                    'QTY_2M_SPECIFIC_HUMIDITY',
    mpas_state_bounds    = 'qv','0.0','NULL','CLAMP',
+                          'q2','0.0','NULL','CLAMP',
   /
 
 &update_mpas_states_nml
