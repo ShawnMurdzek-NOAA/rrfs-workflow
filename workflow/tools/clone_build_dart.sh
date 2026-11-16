@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=all
-dart_hash=f2a13259
+dart_hash=4a4a11d1
 diag_hash=482f55dc
 dart2_hash=bbd0f89
 
