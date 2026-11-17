@@ -52,6 +52,19 @@ for ob in ${all_obs[@]}; do
             --max ${DART_DA_HALF_WINDOW} \
             --out_fname ${ioda_filter}
 
+    # Additional timeOffset filter for near-surface obs
+    # Only select observations with timeOffset closest to 0
+    # This removes multiple observations from the same location at different times
+    # Also enable option to pre-filter surface obs based on Quality Marker flag
+    if [ ${ob} == "adpsfc" ]; then
+      ioda_filter2="${ob}_time_filtered2.nc"
+      ${HOMErrfs}/workflow/tools/filter_sfc_obs_by_closest_timeOffset.py \
+	      -i ${ioda_filter} \
+	      -o ${ioda_filter2} \
+	      --filter-qc
+      ioda_filter=${ioda_filter2}
+    fi
+
     # Add obs errors to IODA file
     ${HOMErrfs}/workflow/tools/modify_ioda_for_dart.py \
             ${ioda_filter} \
