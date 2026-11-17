@@ -287,6 +287,10 @@ def modify_ioda(ioda, err_dict, moisture_var):
                 ioda['ObsValue'][mois_field].attrs = {'long_name' : 'Dewpoint Temperature', 'units': 'K'}
                 ioda['ObsError'][mois_field].attrs = {'long_name' : 'Dewpoint Temperature error', 'units': 'K'}
 
+        # Set ObsValue to NaN if ObsError is NaN
+        nan_idx = np.isnan(ioda['ObsError'][v])
+        ioda['ObsValue'][v].values[nan_idx] = np.nan
+
     return ioda
 
 
