@@ -19,6 +19,7 @@ def dart_filter(xmlFile, expdir):
         'COLDSTART_CYCS_DO_DA': os.getenv('COLDSTART_CYCS_DO_DA', 'TRUE').upper(),
         'ENS_SIZE': os.getenv("ENS_SIZE", '5'),
         'DART_DA_HALF_WINDOW': f'{DART_DA_HALF_WINDOW}',
+        'DART_PREPROCESS_OBS': os.getenv('DART_PREPROCESS_OBS', 'FALSE').upper(),
     }
     task_id = "dart_filter"
 
