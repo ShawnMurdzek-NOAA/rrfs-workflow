@@ -155,10 +155,10 @@ if __name__ == '__main__':
     obs_seq = obsq.ObsSequence(obs_seq_name)
 
     # Make vertical profile plots
-    #plot_vprofs(obs_seq)
+    plot_vprofs(obs_seq)
 
     # Make ranked histogram plots
-    #plot_rank_hist(obs_seq)
+    plot_rank_hist(obs_seq)
 
     # Make spatial distribution of QC flags plots
     plot_spatial_dist_qc(obs_seq)
