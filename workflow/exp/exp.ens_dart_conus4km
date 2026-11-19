@@ -178,8 +178,7 @@ case ${MACHINE} in
     export NODES_PREP_IC="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     export NODES_SAVE_FOR_NEXT="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     export NODES_DART_FILTER="<nodes>40:ppn=20</nodes>"
-    export WALLTIME_DART_FILTER="01:15:00"
-    export MEMORY_DART_UPDATE="25G"
+    export WALLTIME_DART_FILTER="00:45:00"
     ;;
   "wcoss2")
     export IC_EXTRN_MDL_BASEDIR="/lfs/h2/emc/lam/noscrub/RRFS2_RETRO_DATA/May2024/GEFS"
