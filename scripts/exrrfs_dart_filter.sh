@@ -42,8 +42,12 @@ init_time_seconds="$(( diff % 86400 ))"
 #-----------------------------------------------------------------------
 #
 
-# copy observations files from COM directory
-${cpreq} "${COMOUT}/dart_obs_proc/${WGF}/obs_seq.out" .
+# copy observations files
+if [[ ${DART_SKIP_IODA^^} == "TRUE" ]]; then
+  ${cpreq} "${DART_OBS_PATH}/obs_seq_${CDATE}.out" obs_seq.out
+else
+  ${cpreq} "${COMOUT}/dart_obs_proc/${WGF}/obs_seq.out" .
+fi
 
 # determine whether to begin new cycles and link correct ensembles
 do_DAcycling='false'

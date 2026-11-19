@@ -171,10 +171,8 @@ def setup_xml(HOMErrfs, expdir):
                 if do_chemistry == "TRUE":
                     ioda_airnow(xmlFile, expdir)
                 ioda_bufr(xmlFile, expdir)
-            if os.getenv("DO_DART", 'FALSE').upper() == "TRUE":
+            if (os.getenv("DO_DART", 'FALSE').upper() == "TRUE") and (os.getenv("DART_SKIP_IODA", 'FALSE').upper() == "FALSE"):
                 dart_obs_proc(xmlFile, expdir)
-                if not os.path.isfile(f"{HOMErrfs}/exec/filter"):
-                    print("  *** DO_DART=true but DART not cloned and compiled yet!!! ***\n  run `tools/clone_build_dart.sh` first\n")
             if os.getenv("DO_RADAR_REF", "FALSE").upper() == "TRUE":
                 ioda_mrms_refl(xmlFile, expdir)
             if os.getenv("DO_NONVAR_CLOUD_ANA", "FALSE").upper() == "TRUE":
@@ -216,6 +214,8 @@ def setup_xml(HOMErrfs, expdir):
                 dart_filter(xmlFile, expdir)
                 dart_update(xmlFile, expdir)
                 dart_diags(xmlFile, expdir)
+                if not os.path.isfile(f"{HOMErrfs}/exec/filter"):
+                    print("  *** DO_DART=true but DART not cloned and compiled yet!!! ***\n  run `tools/clone_build_dart.sh` first\n")
             if os.getenv("DO_NONVAR_CLOUD_ANA", "FALSE").upper() == "TRUE":
                 nonvar_cldana(xmlFile, expdir, do_ensemble=True)
             if os.getenv("DO_PYDAMONITOR", "FALSE").upper() == "TRUE":
