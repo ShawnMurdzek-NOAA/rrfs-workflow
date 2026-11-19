@@ -108,6 +108,19 @@ if [[ ${START_TYPE} == "warm" ]] || [[ ${START_TYPE} == "cold" && ${COLDSTART_CY
   export OMP_NUM_THREADS=1
 
   source prep_step
+
+  # If desired, preprocess obs_seq.out file
+  if [[ ${DART_PREPROCESS_OBS^^} == "TRUE" ]]; then
+    echo "Preprocessing DART obs_seq.out file"
+    ${cpreq} obs_seq.out obs_seq.original
+    ${cpreq} "${HOMErrfs}"/workflow/sideload/DART/models/mpas_atm/work/mpas_dart_obs_preprocess .
+    echo "${init_time_days}, ${init_time_seconds}" | ./mpas_dart_obs_preprocess
+    export err=$?
+    err_chk
+    cp obs_seq.original "${COMOUT}/dart_filter/${WGF}"
+  fi
+
+  # Run filter
   ${cpreq} "${HOMErrfs}"/workflow/sideload/DART/models/mpas_atm/work/filter .
   ${MPI_RUN_CMD} ./filter
   # check the status
