@@ -464,10 +464,10 @@
   /
 
 &mpas_dart_obs_preprocess_nml
-   file_name_input          = 'obs_seq.old'
-   file_name_output         = 'obs_seq.new'
+   file_name_input          = 'obs_seq.original'
+   file_name_output         = 'obs_seq.out'
    include_sig_data         = .true.
-   superob_aircraft         = .false.
+   superob_aircraft         = .true.
    superob_sat_winds        = .false.
    sfc_elevation_check      = .false.
    overwrite_ncep_sfc_qc    = .false.
@@ -477,7 +477,7 @@
    sfc_elevation_tol        = 300.0
    obs_pressure_top         = 1.0
    obs_height_top           = 2.0e10
-   max_num_obs              = 1000000
+   max_num_obs              = 10000000
    sonde_extra              = 'obs_seq.rawin'
    metar_extra              = 'obs_seq.metar'
    acars_extra              = 'obs_seq.acars'
@@ -489,7 +489,7 @@
    gpsro_extra              = 'obs_seq.gpsro'
    tc_sonde_radii           = -1.0
    overwrite_obs_time       = .false.
-   windowing_obs_time       = .true.
+   windowing_obs_time       = .false.
    windowing_int_hour       = 0.5
 /
 
