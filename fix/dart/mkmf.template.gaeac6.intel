@@ -19,6 +19,9 @@ LIBS = -L$(netcdf_c_ROOT)/lib -L$(netcdf_fortran_ROOT)/lib -lnetcdff -lnetcdf
 FFLAGS  = -O -assume buffered_io $(INCS)
 LDFLAGS = $(FFLAGS) $(LIBS)
 
+# Flags for debugging
+#FFLAGS  = -g -traceback -check all $(INCS)
+
 # for development or debugging, use this instead:
 # FFLAGS = -g -C -check noarg_temp_created -fpe0 \
 #          -fp-model precise  -ftrapuv -traceback \
