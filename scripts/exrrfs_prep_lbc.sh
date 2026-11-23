@@ -17,12 +17,16 @@ lbc_hrs=$(( 10#${PREP_LBC_LOOK_BACK_HRS} ))
 #
 # find cycle that has boundary files
 #
+CDATElbcend=$( ${NDATE} $((10#${fcst_len_hrs_thiscyc})) "${CDATE}")
+string_time=$(date -d "${CDATElbcend:0:8} ${CDATElbcend:8:2}" +%Y-%m-%d_%H.%M.%S)
+last_bdyfile="lbc.${string_time}.nc"
 if [[ ${USE_PROC_EXTRN_LBC^^} == "TRUE" ]]; then
   lbc_dir="${PROC_EXTRN_LBC_DIR}"
+  checkfile=${lbc_dir}${MEMDIR}/${last_bdyfile}
+  if [[ -s "${checkfile}" ]]; then
+     echo "Found ${checkfile}; Use it as boundary for forecast "
+  fi
 else
-  CDATElbcend=$( ${NDATE} $((10#${fcst_len_hrs_thiscyc})) "${CDATE}")
-  string_time=$(date -d "${CDATElbcend:0:8} ${CDATElbcend:8:2}" +%Y-%m-%d_%H.%M.%S)
-  last_bdyfile="lbc.${string_time}.nc"
   n=0
   while (( n <= lbc_hrs )); do
     CDATElbc=$(${NDATE} -$((10#${n})) "${CDATE}")
