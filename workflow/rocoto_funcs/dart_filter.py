@@ -14,13 +14,15 @@ def dart_filter(xmlFile, expdir):
     # Task-specific EnVars beyond the task_common_vars
     extrn_mdl_source = os.getenv('IC_EXTRN_MDL_NAME', 'IC_EXTRN_MDL_NAME_not_defined')
     DART_DA_HALF_WINDOW = os.getenv("DART_DA_HALF_WINDOW", 'DART_DA_HALF_WINDOW_not_defined')
+    dart_skip_ioda = os.getenv('DART_SKIP_IODA', 'FALSE').upper()
+    dart_obs_path = os.getenv('DART_OBS_PATH', 'DART_OBS_PATH_not_defined')
     dcTaskEnv = {
         'EXTRN_MDL_SOURCE': f'{extrn_mdl_source}',
         'COLDSTART_CYCS_DO_DA': os.getenv('COLDSTART_CYCS_DO_DA', 'TRUE').upper(),
         'ENS_SIZE': os.getenv("ENS_SIZE", '5'),
         'DART_DA_HALF_WINDOW': f'{DART_DA_HALF_WINDOW}',
-        'DART_SKIP_IODA': os.getenv('DART_SKIP_IODA', 'FALSE').upper(),
-        'DART_OBS_PATH': os.getenv('DART_OBS_PATH', 'DART_OBS_PATH_not_defined').upper(),
+        'DART_SKIP_IODA': dart_skip_ioda,
+        'DART_OBS_PATH': dart_obs_path,
     }
     task_id = "dart_filter"
 
@@ -28,10 +30,13 @@ def dart_filter(xmlFile, expdir):
     # dependencies
     timedep = ""
     taskdep = ""
+    datadep = ""
     realtime = os.getenv("REALTIME", "false")
     if realtime.upper() == "TRUE":
         starttime = get_cascade_env(f"STARTTIME_{task_id}".upper())
         timedep = f'\n    <timedep><cyclestr offset="{starttime}">@Y@m@d@H@M00</cyclestr></timedep>'
+    elif dart_skip_ioda:
+        datadep = f'\n    <datadep age="00:02:00"><cyclestr>{dart_obs_path}/obs_seq_@Y@m@d@H.out</cyclestr></datadep>'
     else:
         taskdep = f'\n    <taskdep task="dart_obs_proc"/>'
     #
@@ -44,7 +49,7 @@ def dart_filter(xmlFile, expdir):
     #
     dependencies = f'''
   <dependency>
-  <and>{timedep}{prep_ic_dep}{jedidep}{taskdep}
+  <and>{timedep}{prep_ic_dep}{jedidep}{taskdep}{datadep}
   </and>
   </dependency>'''
 
