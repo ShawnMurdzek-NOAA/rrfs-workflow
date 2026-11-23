@@ -178,12 +178,13 @@ def setup_xml(HOMErrfs, expdir):
             if os.getenv("DO_NONVAR_CLOUD_ANA", "FALSE").upper() == "TRUE":
                 nonvar_bufrobs(xmlFile, expdir)
                 nonvar_reflobs(xmlFile, expdir)
-            ungrib_ic(xmlFile, expdir, do_ensemble=True)
-            if "global" not in MESH_NAME:
-                ungrib_lbc(xmlFile, expdir, do_ensemble=True)
-            ic(xmlFile, expdir, do_ensemble=True)
-            if "global" not in MESH_NAME:
-                lbc(xmlFile, expdir, do_ensemble=True)
+            if os.getenv("DO_IC_LBC", "TRUE").upper() == "TRUE":
+                ungrib_ic(xmlFile, expdir, do_ensemble=True)
+                if "global" not in MESH_NAME:
+                    ungrib_lbc(xmlFile, expdir, do_ensemble=True)
+                ic(xmlFile, expdir, do_ensemble=True)
+                if "global" not in MESH_NAME:
+                    lbc(xmlFile, expdir, do_ensemble=True)
 
             # Check that number of processors for prep_ic is greater than or equal to ensemble size
             prep_ic_nodes_str = os.getenv("NODES_PREP_IC", "")

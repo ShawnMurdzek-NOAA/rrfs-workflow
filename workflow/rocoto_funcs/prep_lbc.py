@@ -11,12 +11,16 @@ def prep_lbc(xmlFile, expdir, do_ensemble=False):
     if os.getenv("DO_SPINUP", "FALSE").upper() == "TRUE":
         cycledefs = 'prod,spinup'
     prep_lbc_look_back_hrs = int(os.getenv("PREP_LBC_LOOK_BACK_HRS", "6"))
+    use_proc_extrn_lbc = os.getenv("USE_PROC_EXTRN_LBC", "FALSE").upper()
+    proc_extrn_lbc_dir = os.getenv("PROC_EXTRN_LBC_DIR", "PROC_EXTRN_LBC_DIR_not_defined")
 
     # Task-specific EnVars beyond the task_common_vars
     dcTaskEnv = {
         'LBC_INTERVAL': os.getenv('LBC_INTERVAL', '3'),
         'FCST_LEN_HRS_CYCLES': os.getenv('FCST_LEN_HRS_CYCLES', '03 03'),
         'PREP_LBC_LOOK_BACK_HRS': f'{prep_lbc_look_back_hrs}',
+        'USE_PROC_EXTRN_LBC': f'{use_proc_extrn_lbc}',
+        'PROC_EXTRN_LBC_DIR': f'{proc_extrn_lbc_dir}',
     }
 
     if not do_ensemble:
@@ -49,17 +53,21 @@ def prep_lbc(xmlFile, expdir, do_ensemble=False):
         timedep = f'\n   <timedep><cyclestr offset="{starttime}">@Y@m@d@H@M00</cyclestr></timedep>'
 
     taskdep = ""
-    for hr in range(0, int(prep_lbc_look_back_hrs) + 1):
-        taskdep = taskdep + f'\n     <metataskdep metatask="lbc{ensindexstr}" cycle_offset="-{hr}:00:00" />'
-    if os.getenv('DO_RTMA', 'FALSE').upper() == 'TRUE':
-        taskdep = f'\n     <taskdep task="prep_ic"/>'
+    datadep = ""
+    if os.getenv('DO_IC_LBC', 'TRUE').upper() == "TRUE":
+        for hr in range(0, int(prep_lbc_look_back_hrs) + 1):
+            taskdep = taskdep + f'\n     <metataskdep metatask="lbc{ensindexstr}" cycle_offset="-{hr}:00:00" />'
+        if os.getenv('DO_RTMA', 'FALSE').upper() == 'TRUE':
+            taskdep = f'\n     <taskdep task="prep_ic"/>'
+    elif use_proc_extrn_lbc == "TRUE":
+        datadep = datadep + f'\n     <datadep age="00:02:00"><cyclestr>{proc_extrn_lbc_dir}/mem#ens_index#/lbc.@Y-@m-@d_@H.@M.@S.nc</cyclestr></datadep>'
 
     dependencies = ""
-    if os.getenv('DO_IC_LBC', 'TRUE').upper() == "TRUE" or os.getenv('DO_RTMA', 'FALSE').upper() == 'TRUE':
+    if os.getenv('DO_IC_LBC', 'TRUE').upper() == "TRUE" or os.getenv('DO_RTMA', 'FALSE').upper() == 'TRUE' or use_proc_extrn_lbc == "TRUE":
         dependencies = f'''
   <dependency>
   <and>{timedep}
-   <or>{taskdep}
+   <or>{taskdep}{datadep}
    </or>
   </and>
   </dependency>'''
