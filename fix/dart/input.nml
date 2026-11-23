@@ -161,6 +161,7 @@
                                 'METAR_TEMPERATURE_2_METER',
                                 'METAR_SPECIFIC_HUMIDITY_2_METER',
                                 'METAR_DEWPOINT_2_METER',
+                                'METAR_CLOUD_AMOUNT',
                                 'ACARS_U_WIND_COMPONENT',
                                 'ACARS_V_WIND_COMPONENT',
                                 'ACARS_TEMPERATURE',
@@ -221,8 +222,18 @@
                           'u10',                   'QTY_10M_U_WIND_COMPONENT',
                           'v10',                   'QTY_10M_V_WIND_COMPONENT',
                           'q2',                    'QTY_2M_SPECIFIC_HUMIDITY',
+                          'cldfrac',               'QTY_CLOUD_FRACTION',
+                          'qc',                    'QTY_CLOUDWATER_MIXING_RATIO',
+                          'qi',                    'QTY_ICE_MIXING_RATIO',
+                          'nc',                    'QTY_DROPLET_NUMBER_CONCENTR',
+                          'ni',                    'QTY_ICE_NUMBER_CONCENTRATION',
    mpas_state_bounds    = 'qv','0.0','NULL','CLAMP',
                           'q2','0.0','NULL','CLAMP',
+                          'qc','0.0','NULL','CLAMP',
+                          'qi','0.0','NULL','CLAMP',
+                          'nc','0.0','NULL','CLAMP',
+                          'ni','0.0','NULL','CLAMP',
+                          'cldfrac','0.0','1.0','CLAMP',
   /
 
 &update_mpas_states_nml

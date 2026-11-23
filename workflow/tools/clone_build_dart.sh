@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=all
-dart_hash=4a4a11d1
+dart_hash=3f32616f
 diag_hash=482f55dc
 dart2_hash=bbd0f89
 
@@ -15,7 +15,7 @@ if [[ -d DART ]]; then
   echo "DART/ already cloned, skipping cloning step"
 else
   which git-lfs 2>/dev/null ||  module load git-lfs
-  GIT_LFS_SKIP_SMUDGE=1 git clone -b DART_Regional https://github.com/syha/DART.git
+  GIT_LFS_SKIP_SMUDGE=1 git clone -b MPAS_DART_soyoung https://github.com/ShawnMurdzek-NOAA/DART.git
   cd DART
   git checkout "${dart_hash}" &> /dev/null
   cd ..
