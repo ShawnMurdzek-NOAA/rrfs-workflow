@@ -8,7 +8,7 @@ export WGF="enkf"   # working group function = "det", "enkf", "ens", "firewx"
 export EXP_NAME=dart_12km
 export VERSION=$(cat ./VERSION)
 export TAG=e12km
-export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/test_workflow/${EXP_NAME}
+export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/mpas_dart_experiments/${EXP_NAME}
 export EXPDIR=${OPSROOT}/exp/rrfs${WGF}
 export COMROOT=${OPSROOT}/com      # task input and output data as well as logs
 export DATAROOT=${OPSROOT}/stmp    # task workdirs ($DATA) which to be removed immediately upon task completion unless KEEPDATA=YES
@@ -17,7 +17,7 @@ export DO_ENSEMBLE=true
 export DO_ENSMEAN_POST=true
 export IC_ONLY=false  # interpolate GEFS/GDAS to the target mesh to provide ensemble BEC
 export DO_DETERMINISTIC=false
-export ENS_SIZE=50
+export ENS_SIZE=32
 export ZETA_LEVELS="L60.txt"
 #
 export DO_IODA=true
@@ -35,7 +35,6 @@ export SAT_USELIST=""  # check config.base on how to set up this variable
 export DO_CYC=true
 export CYC_INTERVAL=1
 for i in {0..23};    do arr[$i]="01"; done # 1hr fcst
-for i in {0..23..12}; do arr[$i]="12"; done # 1hr fcst every 12hrs
 export FCST_LEN_HRS_CYCLES="${arr[*]}"
 export HISTORY_INTERVAL=1
 export MPASOUT_TIMELEVELS="0 1"
@@ -158,7 +157,7 @@ case ${MACHINE} in
     export NODES_UPP="<nodes>1:ppn=80</nodes>"
     export NODES_ENSMEAN="<nodes>1:ppn=80</nodes>"
     export NODES_GETKF="<nodes>1:ppn=160</nodes>"
-    export NODES_DART_FILTER="<nodes>1:ppn=80</nodes>"
+    export NODES_DART_FILTER="<nodes>2:ppn=80</nodes>"
     export NODES_PREP_IC="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     export NODES_SAVE_FOR_NEXT="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     ;;

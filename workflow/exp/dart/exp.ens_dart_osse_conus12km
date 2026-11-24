@@ -5,7 +5,7 @@
 export NET=rrfs                    # rrfs, rtma, 
 export MESH_NAME=conus12km         # conus12km, conus3km, na12km, etc
 export WGF="enkf"   # working group function = "det", "enkf", "ens", "firewx"
-export EXP_NAME=test_cycling_12km
+export EXP_NAME=dart_osse_12km
 export VERSION=$(cat ./VERSION)
 export TAG=e12km
 export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/mpas_dart_experiments/${EXP_NAME}
@@ -33,7 +33,7 @@ export DO_CLEAN=true
 export RADARREFL_TIMELEVEL="00"  # 00 15 30 45 min
 export SAT_USELIST=""  # check config.base on how to set up this variable
 export DART_SKIP_IODA=true
-export DART_OBS_PATH=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run_4km/syn_obs/adpsfc_aircar/obs_seq
+export DART_OBS_PATH=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run_4km/syn_obs/adpsfc_aircar_ceilometer/obs_seq
 
 export DO_CYC=true
 export CYC_INTERVAL=1
@@ -166,7 +166,7 @@ case ${MACHINE} in
     export NODES_UPP="<nodes>1:ppn=80</nodes>"
     export NODES_ENSMEAN="<nodes>1:ppn=80</nodes>"
     export NODES_GETKF="<nodes>1:ppn=160</nodes>"
-    export NODES_DART_FILTER="<nodes>1:ppn=80</nodes>"
+    export NODES_DART_FILTER="<nodes>2:ppn=80</nodes>"
     export NODES_PREP_IC="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     export NODES_SAVE_FOR_NEXT="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     ;;
