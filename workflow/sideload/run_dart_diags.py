@@ -39,9 +39,10 @@ def plot_vprofs(obs):
     all_types = obs.df['type'].unique()
 
     # Make a separate plot for each type
-    # p_lvls is in Pa, sfc_lvls is in m ASL
+    # p_lvls is in Pa, sfc_lvls is in m ASL, z_lvls is in m
     p_lvls = np.arange(0, 100001, 5000)
     sfc_lvls = list(range(0, 401, 100)) + list(range(600, 1001, 200)) + list(range(1500, 5001, 500))
+    z_lvls = np.arange(0, 10001, 500)
     for t in all_types:
 
         # Determine vertical coordinate
@@ -52,8 +53,11 @@ def plot_vprofs(obs):
             fig = mp.plot_profile(obs, p_lvls, t, bias=True, rmse=True, totalspread=True)  # noqa: F841
         elif vcoord == 'surface (m)':
             fig = mp.plot_profile(obs, sfc_lvls, t, bias=True, rmse=True, totalspread=True)  # noqa: F841
+        elif vcoord == 'height (m)':
+            fig = mp.plot_profile(obs, z_lvls, t, bias=True, rmse=True, totalspread=True)  # noqa: F841
         else:
             print(f"WARNING: Unknown vcoord in plot_vprofs: {vcoord}")
+            return None
 
         plt.savefig(f"vprof_{t}.png", dpi=200)
 
