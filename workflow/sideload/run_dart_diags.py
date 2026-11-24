@@ -39,7 +39,7 @@ def plot_vprofs(obs):
     all_types = obs.df['type'].unique()
 
     # Make a separate plot for each type
-    # p_lvls is in Pa, sfc_lvls is in m ASL, z_lvls is in m
+    # p_lvls is in Pa, sfc_lvls is in m ASL, z_lvls is in m AGL
     p_lvls = np.arange(0, 100001, 5000)
     sfc_lvls = list(range(0, 401, 100)) + list(range(600, 1001, 200)) + list(range(1500, 5001, 500))
     z_lvls = np.arange(0, 10001, 500)
