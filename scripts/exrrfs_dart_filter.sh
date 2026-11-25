@@ -65,11 +65,11 @@ posteriors="filter_out.txt"
 touch ${priors}
 touch ${posteriors}
 mkdir -p ens_in
-mkdir -p "${UMBRELLA_DART_FILTER_DATA}/ens_out"
+mkdir -p "${ENSOUT}"
 for i in $(seq -w 001 "${ENS_SIZE}"); do
   ln -snf "${UMBRELLA_PREP_IC_DATA}/mem${i}/${initial_file}" "ens_in/mem${i}.nc"
   echo "ens_in/mem${i}.nc" >> ${priors}
-  echo "${UMBRELLA_DART_FILTER_DATA}/ens_out/mem${i}.nc" >> ${posteriors}
+  echo "${ENSOUT}/mem${i}.nc" >> ${posteriors}
 done
 
 # create a template netCDF file with both mpasout and invariant information
