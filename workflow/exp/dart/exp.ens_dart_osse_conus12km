@@ -5,10 +5,10 @@
 export NET=rrfs                    # rrfs, rtma, 
 export MESH_NAME=conus12km         # conus12km, conus3km, na12km, etc
 export WGF="enkf"   # working group function = "det", "enkf", "ens", "firewx"
-export EXP_NAME=dart_12km
+export EXP_NAME=dart_osse_12km
 export VERSION=$(cat ./VERSION)
 export TAG=e12km
-export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/test_workflow/${EXP_NAME}
+export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/mpas_dart_experiments/${EXP_NAME}
 export EXPDIR=${OPSROOT}/exp/rrfs${WGF}
 export COMROOT=${OPSROOT}/com      # task input and output data as well as logs
 export DATAROOT=${OPSROOT}/stmp    # task workdirs ($DATA) which to be removed immediately upon task completion unless KEEPDATA=YES
@@ -20,38 +20,47 @@ export DO_DETERMINISTIC=false
 export ENS_SIZE=50
 export ZETA_LEVELS="L60.txt"
 #
-export DO_IODA=true
+export DO_IC_LBC=false
+export DO_IODA=false
 export DO_JEDI=false
 export DO_DART=true
 export DO_NONVAR_CLOUD_ANA=false
-export COLDSTART_CYCS_DO_DA=false
+export COLDSTART_CYCS_DO_DA=true
 export DO_RECENTER=false
 export DO_RADAR_REF=false
 export SAVE_GETKF_ANL=false
 export DO_CLEAN=true
 export RADARREFL_TIMELEVEL="00"  # 00 15 30 45 min
 export SAT_USELIST=""  # check config.base on how to set up this variable
+export DART_SKIP_IODA=true
+export DART_OBS_PATH=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run_4km/syn_obs/adpsfc_aircar_ceilometer/obs_seq
 
 export DO_CYC=true
 export CYC_INTERVAL=1
 for i in {0..23};    do arr[$i]="01"; done # 1hr fcst
-for i in {0..23..12}; do arr[$i]="12"; done # 1hr fcst every 12hrs
+for i in {0..23..3}; do arr[$i]="12"; done # 12hr fcst every 3hrs
 export FCST_LEN_HRS_CYCLES="${arr[*]}"
 export HISTORY_INTERVAL=1
 export MPASOUT_TIMELEVELS="0 1"
 export POST_GROUP_TOT_NUM=1 # num of groups, the final group absorbs leftovers, the first group contains the extra f000h file
 export ENSMEAN_GROUP_TOTAL_NUM=3
 
-export IC_OFFSET=30
-export LBC_OFFSET=6
-export LBC_LENGTH=18
+export IC_OFFSET=12
+export LBC_OFFSET=12
+export LBC_LENGTH=84
 export LBC_INTERVAL=1
 export LBC_UNGRIB_GROUP_TOTAL_NUM=1
 export LBC_GROUP_TOTAL_NUM=1
+export USE_PROC_EXTRN_LBC=true
+export PROC_EXTRN_LBC_DIR=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/mpas_dart_experiments/bgd_lbc_conus12km/com/rrfs/v2.1.4/rrfs.20240506/00/lbc/enkf
 
-export RETRO_PERIOD="2024052700-2024052800"
-export LBC_CYCS="00 12"
-export COLDSTART_CYCS="00 12"   # cycles to cold start from external models
+export CYCLEDEF_IC="202405060000 202405061200 24:00:00"
+export CYCLEDEF_LBC="202405060000 202405061200 24:00:00"
+export CYCLEDEF_PROD="202405060100 202405090000 01:00:00"
+
+#export RETRO_PERIOD="2024050600-2024050900"
+export LBC_CYCS="00"
+export COLDSTART_CYCS="25"   # cycles to cold start from external models
 export RECENTER_CYCS="${COLDSTART_CYCS}"
 export DET_RECENTERCYCS_DO_DA=false # whether or not do detministic DA at RECENTER_CYCS
 #
@@ -142,7 +151,7 @@ case ${MACHINE} in
     export CLUSTER=""
     ;;
   "gaeac6")
-    export IC_EXTRN_MDL_BASEDIR="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/GEFS"
+    export IC_EXTRN_MDL_BASEDIR="/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/external_model_output/downloads/GEFS"
     export LBC_EXTRN_MDL_BASEDIR=${IC_EXTRN_MDL_BASEDIR}
     export OBSPATH="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/obs_rap"
     export OBSPATH_NSSLMOSIAC="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/reflectivity"
@@ -158,7 +167,7 @@ case ${MACHINE} in
     export NODES_UPP="<nodes>1:ppn=80</nodes>"
     export NODES_ENSMEAN="<nodes>1:ppn=80</nodes>"
     export NODES_GETKF="<nodes>1:ppn=160</nodes>"
-    export NODES_DART_FILTER="<nodes>1:ppn=80</nodes>"
+    export NODES_DART_FILTER="<nodes>2:ppn=80</nodes>"
     export NODES_PREP_IC="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     export NODES_SAVE_FOR_NEXT="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     ;;

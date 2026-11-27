@@ -64,10 +64,15 @@ if os.getenv("DO_DART", "FALSE").upper() == "TRUE":
         print('To use DART, DO_DETERMINISTIC must be FALSE.')
         print('Please set DO_DETERMINISTIC = FALSE or DO_DART = FALSE and try again')
         exit()
-    if os.getenv("DO_IODA", "FALSE").upper() == "FALSE":
-        print('DO_IODA = FALSE and DO_DART = TRUE.')
-        print('To use DART, DO_IODA must be TRUE.')
-        print('Please set DO_IODA = TRUE or DO_DART = FALSE and try again')
+    if (os.getenv("DO_IODA", "FALSE").upper() == "FALSE") and (os.getenv("DART_SKIP_IODA", "FALSE").upper() == "FALSE"):
+        print('DO_IODA = FALSE, DART_SKIP_IODA = FALSE, and DO_DART = TRUE.')
+        print('To use DART, DO_IODA or DART_SKIP_IODA must be TRUE')
+        print('Please set DO_IODA = TRUE, DART_SKIP_IODA = TRUE, or DO_DART = FALSE and try again')
+        exit()
+    if (os.getenv("DO_IODA", "FALSE").upper() == "TRUE") and (os.getenv("DART_SKIP_IODA", "FALSE").upper() == "TRUE"):
+        print('DO_IODA = TRUE and DART_SKIP_IODA = TRUE')
+        print('Both DO_IODA and DART_SKIP_IODA cannot be TRUE')
+        print('Please set DO_IODA = FALSE or DART_SKIP_IODA = FALSE and try again')
         exit()
 
 # create comroot (no matter exists or not)

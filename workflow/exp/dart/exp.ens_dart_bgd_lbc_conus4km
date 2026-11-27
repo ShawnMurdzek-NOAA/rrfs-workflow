@@ -5,7 +5,7 @@
 export NET=rrfs                    # rrfs, rtma, 
 export MESH_NAME=conus4km         # conus12km, conus3km, na12km, etc
 export WGF="enkf"   # working group function = "det", "enkf", "ens", "firewx"
-export EXP_NAME=dart_4km
+export EXP_NAME=bgd_lbc_conus4km
 export VERSION=$(cat ./VERSION)
 export TAG=e4km
 export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/mpas_dart_experiments/${EXP_NAME}
@@ -24,9 +24,9 @@ export SFC_UPDATE_SOURCE_DIR=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_d
 #
 export USE_MERRA2=false  # false: default GOCART aerosol climatology; true: MERRA2 aerosol climatology
 #
-export DO_IODA=true
+export DO_IODA=false
 export DO_JEDI=false
-export DO_DART=true
+export DO_DART=false
 export GETKF_ONESTEP=false
 export DO_NONVAR_CLOUD_ANA=false
 export COLDSTART_CYCS_DO_DA=false
@@ -51,13 +51,13 @@ export DO_POST=true
 
 export IC_OFFSET=12
 export LBC_OFFSET=12
-export LBC_LENGTH=48
+export LBC_LENGTH=84
 export LBC_INTERVAL=1
 export LBC_UNGRIB_GROUP_TOTAL_NUM=1
 export LBC_GROUP_TOTAL_NUM=2
 export PREP_LBC_LOOK_BACK_HRS=11
 
-export RETRO_PERIOD="2024050600-2024050700"
+export RETRO_PERIOD="2024050600-2024050600"
 export LBC_CYCS="00"
 export COLDSTART_CYCS="00"   # cycles to cold start from external models
 export RECENTER_CYCS="${COLDSTART_CYCS}"

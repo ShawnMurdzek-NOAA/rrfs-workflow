@@ -3,12 +3,12 @@
 #
 # shellcheck disable=all
 export NET=rrfs                    # rrfs, rtma, 
-export MESH_NAME=conus3km         # conus12km, conus3km, na12km, etc
+export MESH_NAME=conus4km         # conus12km, conus3km, na12km, etc
 export WGF="enkf"   # working group function = "det", "enkf", "ens", "firewx"
-export EXP_NAME=dart_3km
+export EXP_NAME=dart_4km
 export VERSION=$(cat ./VERSION)
-export TAG=e3km
-export OPSROOT=/work2/noaa/zrtrr/murdzek/cloud_da_dart/rrfs_dart_runs/${EXP_NAME}
+export TAG=e4km
+export OPSROOT=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/mpas_dart_experiments/${EXP_NAME}
 export EXPDIR=${OPSROOT}/exp/${NET}${WGF}
 export COMROOT=${OPSROOT}/com      # task input and output data as well as logs
 export DATAROOT=${OPSROOT}/stmp    # task workdirs ($DATA) which to be removed immediately upon task completion unless KEEPDATA=YES
@@ -19,6 +19,7 @@ export IC_ONLY=false #true  # interpolate GEFS/GDAS to the target mesh to provid
 export DO_DETERMINISTIC=false
 export ENS_SIZE=50
 export ZETA_LEVELS="L60.txt"
+export SFC_UPDATE_SOURCE_DIR=/gpfs/f6/bil-pmp/scratch/Shawn.S.Murdzek/cloud_da_dart/RRFSv2X_nature_run_4km/MPAS_RAP
 #export ENS_METADEP_FRAC_THRESHOLD=0.5
 #
 export USE_MERRA2=false  # false: default GOCART aerosol climatology; true: MERRA2 aerosol climatology
@@ -40,7 +41,8 @@ export DO_SPPT=false
 
 export DO_CYC=true
 export CYC_INTERVAL=1
-for i in {0..23};    do arr[$i]="01"; done # 3hr fcst
+for i in {0..23};    do arr[$i]="01"; done # 1hr fcst
+for i in {0..23..3}; do arr[$i]="12"; done # 12hr fcst every 3hrs
 export FCST_LEN_HRS_CYCLES="${arr[*]}"
 export HISTORY_INTERVAL=1
 export DIAG_INTERVAL=1
@@ -48,20 +50,23 @@ export MPASOUT_TIMELEVELS="0 1"
 export POST_GROUP_TOT_NUM=1 # num of groups, the final group absorbs leftovers, the first group contains the extra f000h file
 export DO_POST=true
 
-export IC_OFFSET=30
-export LBC_OFFSET=6
-export LBC_LENGTH=18
+export IC_OFFSET=12
+export LBC_OFFSET=12
+export LBC_LENGTH=24
 export LBC_INTERVAL=1
 export LBC_UNGRIB_GROUP_TOTAL_NUM=1
 export LBC_GROUP_TOTAL_NUM=2
 export PREP_LBC_LOOK_BACK_HRS=11
 
-export RETRO_PERIOD="2024052700-2024052800"
+export RETRO_PERIOD="2024050600-2024050900"
 export LBC_CYCS="00 12"
 export COLDSTART_CYCS="00 12"   # cycles to cold start from external models
 export RECENTER_CYCS="${COLDSTART_CYCS}"
 export DET_RECENTERCYCS_DO_DA=false #true # whether or not do detministic DA at RECENTER_CYCS
 export DET_RECENTERCYCS_CLDANA=false #true # whether or not do detministic NONVAR_CLOUD_ANA at RECENTER_CYCS
+export DO_SFC_UPDATE=true # do sfc update at cold start cycs
+export SFC_UPDATE_CYCS=${COLDSTART_CYCS}
+export SFC_UPDATE_LOOK_BACK_HRS=3  # hours going back to look for surface update source files (mpasout)
 #
 export DO_PYDAMONITOR=false
 #export DO_GRAPHICS=true
@@ -160,7 +165,7 @@ case ${MACHINE} in
     export OBSPATH="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/obs_rap"
     export OBSPATH_NSSLMOSAIC="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/reflectivity"
     export OBSPATH_AIRNOW="/gpfs/f6/bil-fire10-oar/world-shared/RRFS2_RETRO_DATA/May2024/airnow"
-    export ACCOUNT="bil-fire10-oar"
+    export ACCOUNT="bil-pmp"
     export QUEUE="normal"
     export PARTITION="batch"
     export CLUSTER="c6"
@@ -173,6 +178,8 @@ case ${MACHINE} in
     export NODES_GETKF="<nodes>20:ppn=40</nodes>"
     export NODES_PREP_IC="<nodes>1:ppn=${ENS_SIZE}</nodes>"
     export NODES_SAVE_FOR_NEXT="<nodes>1:ppn=${ENS_SIZE}</nodes>"
+    export NODES_DART_FILTER="<nodes>40:ppn=20</nodes>"
+    export WALLTIME_DART_FILTER="00:45:00"
     ;;
   "wcoss2")
     export IC_EXTRN_MDL_BASEDIR="/lfs/h2/emc/lam/noscrub/RRFS2_RETRO_DATA/May2024/GEFS"
